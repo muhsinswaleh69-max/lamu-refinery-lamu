@@ -1,63 +1,36 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Recruitment Database - Lamu Refinery | SKYNET-CYBER SHIANDA</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:10px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.header b{color:#FFC000}.container{padding:15px;display:grid;grid-template-columns:1fr 3fr;gap:15px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}input,select,button{width:100%;padding:7px;margin:4px 0;border:1px solid #ddd;border-radius:4px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}th,td{border:1px solid #ddd;padding:5px;text-align:left}th{background:#0D4F8B;color:#fff}.hired{background:#dcfce7;color:#166534;padding:2px 5px;border-radius:3px;font-weight:bold}.short{background:#fef9c3;padding:2px 5px;border-radius:3px}.reject{background:#fee2e2;color:#b91c1c;padding:2px 5px;border-radius:3px}</style>
+<title>Recruitment - Lamu Refinery CLOUD</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:10px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.header b{color:#FFC000}.container{padding:15px;display:grid;grid-template-columns:1fr 3fr;gap:15px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}input,select,button{width:100%;padding:7px;margin:4px 0;border:1px solid #ddd;border-radius:4px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}th,td{border:1px solid #ddd;padding:5px;text-align:left}th{background:#0D4F8B;color:#fff}</style>
 </head><body>
-<div class="nav"><div><b>LAMU REFINERY</b> - Recruitment | SKYNET-CYBER SHIANDA</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
-<div class="header"><h2>👷 RECRUITMENT DATABASE - 60,000+ APPLICANTS</h2><p>Built by <b>Muhsin</b> - Searchable by ID, Phone, Skill, Village for Lamu County Compliance</p><p id="today"></p><p id="count" style="color:#FFC000;font-weight:bold"></p></div>
+<div class="nav"><div><b>LAMU REFINERY</b> - CLOUD DB</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
+<div class="header"><h2>👷 RECRUITMENT - SUPABASE CLOUD</h2><p>Project: dnjsdcmtwrvydmoalmzc | Data saves forever</p><p id="today"></p><p id="count" style="color:#FFC000;font-weight:bold">Loading cloud...</p></div>
 <div class="container">
 <div class="card">
 <h3>Add Applicant</h3>
-<label>ID No / Passport</label><input id="appID" placeholder="e.g. 30000001">
-<label>Full Name</label><input id="appName" placeholder="e.g. Omar Ali">
-<label>Phone (Safaricom)</label><input id="appPhone" placeholder="07...">
-<label>Village / Ward</label><select id="appVillage"><option>Mokowe</option><option>Hindi</option><option>Lamu Town</option><option>Mpeketoni</option><option>Kiunga</option><option>Faza</option><option>Witu</option><option>Other</option></select>
-<label>Skill / Trade</label><select id="appSkill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Welder</option><option>Electrician</option><option>Plumber</option><option>Steel Fixer</option><option>Driver</option><option>Operator</option><option>Engineer</option><option>Safety Officer</option></select>
-<label>Experience Years</label><input id="appExp" type="number" placeholder="e.g. 3">
-<label>Status</label><select id="appStatus"><option>New Applicant</option><option>Shortlisted</option><option>Hired</option><option>Rejected</option><option>Blacklisted</option></select>
-<button onclick="addApp()">+ ADD APPLICANT</button>
+<label>ID No</label><input id="appID" placeholder="30000001">
+<label>Name</label><input id="appName" placeholder="Omar Ali">
+<label>Phone</label><input id="appPhone" placeholder="07...">
+<label>Village</label><select id="appVillage"><option>Mokowe</option><option>Hindi</option><option>Lamu Town</option><option>Mpeketoni</option><option>Kiunga</option><option>Faza</option><option>Witu</option><option>Other</option></select>
+<label>Skill</label><select id="appSkill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Welder</option><option>Electrician</option><option>Plumber</option><option>Steel Fixer</option><option>Driver</option><option>Operator</option><option>Engineer</option><option>Safety Officer</option></select>
+<label>Exp</label><input id="appExp" type="number" placeholder="3">
+<label>Status</label><select id="appStatus"><option>New Applicant</option><option>Shortlisted</option><option>Hired</option><option>Rejected</option></select>
+<button onclick="addApp()">+ SAVE TO CLOUD</button>
 <hr style="margin:10px 0">
-<h3>Search 60k Database</h3>
-<input id="searchBox" placeholder="Search by ID, Name, Phone, Skill, Village..." oninput="render()" style="background:#fef9c3">
-<select id="filterSkill" onchange="render()"><option value="all">All Skills</option><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Welder</option><option>Electrician</option><option>Driver</option></select>
-<select id="filterStatus" onchange="render()"><option value="all">All Status</option><option>New Applicant</option><option>Shortlisted</option><option>Hired</option></select>
-<button style="background:green;margin-top:8px" onclick="exportCSV()">📥 EXPORT FOR GOVERNOR REPORT</button>
+<input id="searchBox" placeholder="Search..." oninput="render()" style="background:#fef9c3">
 </div>
-<div class="card">
-<h3>Applicants List - Lamu County Priority</h3>
-<div style="overflow-x:auto">
-<table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="appTable"></tbody></table>
-</div>
-</div>
+<div class="card"><h3>Cloud Data</h3><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="appTable"></tbody></table></div></div>
 </div>
 <script>
-let apps=JSON.parse(localStorage.getItem('lamu_apps')||'[]');
-function save(){localStorage.setItem('lamu_apps',JSON.stringify(apps));render();}
-function addApp(){
- let id=document.getElementById('appID').value.trim(), name=document.getElementById('appName').value.trim(), phone=document.getElementById('appPhone').value.trim(), village=document.getElementById('appVillage').value, skill=document.getElementById('appSkill').value, exp=document.getElementById('appExp').value, status=document.getElementById('appStatus').value;
- if(!id||!name||!phone){alert('Enter ID, Name, Phone');return;}
- if(apps.find(a=>a.id==id)){alert('Applicant ID already exists! Use update.');return;}
- apps.push({id:id,name:name,phone:phone,village:village,skill:skill,exp:exp,status:status,date:new Date().toLocaleDateString()});
- document.getElementById('appID').value='';document.getElementById('appName').value='';document.getElementById('appPhone').value='';document.getElementById('appExp').value='';
- save();
-}
-function render(){
- let q=document.getElementById('searchBox').value.toLowerCase(), fs=document.getElementById('filterSkill').value, fst=document.getElementById('filterStatus').value;
- let tb=document.getElementById('appTable'); tb.innerHTML='';
- let filtered=apps.filter(a=>{
-  let matchQ=!q||a.id.toLowerCase().includes(q)||a.name.toLowerCase().includes(q)||a.phone.includes(q)||a.skill.toLowerCase().includes(q)||a.village.toLowerCase().includes(q);
-  let matchS=fs=='all'||a.skill==fs; let matchSt=fst=='all'||a.status==fst;
-  return matchQ&&matchS&&matchSt;
- });
- filtered.slice(0,500).forEach(a=>{
-  let badge=a.status=='Hired'?'<span class="hired">HIRED</span>':a.status=='Shortlisted'?'<span class="short">Shortlisted</span>':a.status=='Rejected'?'<span class="reject">Rejected</span>':a.status;
-  tb.innerHTML+=`<tr><td><b>${a.id}</b></td><td>${a.name}</td><td>${a.phone}</td><td>${a.village}</td><td>${a.skill}</td><td>${a.exp||0}yr</td><td>${badge}</td><td>${a.date}</td><td><button onclick="setStatus('${a.id}','Hired')" style="background:green;padding:2px 4px;font-size:10px">Hire</button><button onclick="delApp('${a.id}')" style="background:red;padding:2px 4px;font-size:10px;margin-top:2px">Del</button></td></tr>`;
- });
- document.getElementById('count').innerText='Total Applicants in System: '+apps.length+' | Showing: '+filtered.length+' (Limit 500 for speed)';
-}
-function setStatus(id,st){let a=apps.find(x=>x.id==id);if(a){a.status=st;save();}}
-function delApp(id){if(confirm('Delete applicant?')){apps=apps.filter(a=>a.id!=id);save();}}
-function exportCSV(){let csv='ID,Name,Phone,Village,Skill,Exp,Status,Date\n';apps.forEach(a=>{csv+=`${a.id},${a.name},${a.phone},${a.village},${a.skill},${a.exp},${a.status},${a.date}\n`;});let blob=new Blob([csv],{type:'text/csv'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Lamu_Recruitment_60k_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
-document.getElementById('today').innerText='Today: '+new Date().toDateString(); render();
+const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
+const SUPABASE_KEY = "PASTE_YOUR_ANON_KEY_HERE"; // <-- PASTE YOUR eyJ... HERE
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let apps=[];
+async function loadApps(){let {data}=await sb.from('lamu_recruitment').select('*').order('created_at',{ascending:false}).limit(1000); if(data){apps=data.map(a=>({id:a.id,name:a.name,phone:a.phone,village:a.village,skill:a.skill,exp:a.exp,status:a.status,date:a.date})); render();}}
+async function addApp(){let id=document.getElementById('appID').value.trim(),name=document.getElementById('appName').value.trim(),phone=document.getElementById('appPhone').value.trim(),village=document.getElementById('appVillage').value,skill=document.getElementById('appSkill').value,exp=document.getElementById('appExp').value,status=document.getElementById('appStatus').value;if(!id||!name||!phone){alert('ID Name Phone required');return;}let {error}=await sb.from('lamu_recruitment').insert([{id:id,name:name,phone:phone,village:village,skill:skill,exp:exp,status:status,date:new Date().toLocaleDateString()}]);if(error){alert(error.message);}else{loadApps();document.getElementById('appID').value='';document.getElementById('appName').value='';}}
+function render(){let q=document.getElementById('searchBox').value.toLowerCase();let tb=document.getElementById('appTable');tb.innerHTML='';let filtered=apps.filter(a=>!q||a.id.toLowerCase().includes(q)||a.name.toLowerCase().includes(q)||a.phone.includes(q));filtered.slice(0,500).forEach(a=>{tb.innerHTML+=`<tr><td><b>${a.id}</b></td><td>${a.name}</td><td>${a.phone}</td><td>${a.village}</td><td>${a.skill}</td><td>${a.exp}yr</td><td>${a.status}</td><td>${a.date}</td><td><button onclick="delApp('${a.id}')" style="background:red;padding:2px">Del</button></td></tr>`});document.getElementById('count').innerText='Total in Cloud: '+apps.length;}
+async function delApp(id){if(confirm('Delete?')){await sb.from('lamu_recruitment').delete().eq('id',id); loadApps();}}
+document.getElementById('today').innerText='Today: '+new Date().toDateString(); loadApps();
 </script>
 </body></html>
