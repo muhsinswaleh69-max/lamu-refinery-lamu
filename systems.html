@@ -1,15 +1,121 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Systems by Muhsin - Lamu Refinery</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}.nav{background:#fff;padding:12px 15px;display:flex;justify-content:space-between;box-shadow:0 2px 5px #ddd;position:sticky;top:0}.logo{color:#0D4F8B;font-weight:900}.menu a{background:#0D4F8B;color:#fff;padding:7px 12px;margin-left:4px;text-decoration:none;font-size:12px;font-weight:bold}.header{background:#0a2a5a;color:#fff;padding:25px;text-align:center}.header h1{color:#FFC000}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px;padding:20px}.sys{border:1px solid #ddd;padding:20px;border-radius:8px;border-top:5px solid #0D4F8B;background:#fff}.sys h3{color:#0D4F8B}.btn{display:inline-block;background:#FFC000;color:#000;padding:8px 14px;margin-top:10px;text-decoration:none;font-weight:bold;border-radius:4px}</style>
-</head><body>
-<div class="nav"><div class="logo">LAMU REFINERY SYSTEMS</div><div class="menu"><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
-<div class="header"><h1>MANAGEMENT SYSTEMS BY MUHSIN</h1><p>SKYNET-CYBER SHIANDA | Offline-Ready for Mokowe Site</p></div>
-<div class="grid">
-<div class="sys"><h3>1. 👷 Workers Attendance & Payroll</h3><p>Daily check-in/out, overtime calc, payslip generator, 60,000 workers support. Works offline.</p><p><b>Tech:</b> HTML, JS, LocalStorage</p><a class="btn" href="#">VIEW DEMO - COMING FROM YOUR EXCEL</a></div>
-<div class="sys"><h3>2. 📦 Store Inventory System</h3><p>Track cement, steel, fuel, tools. Stock in/out, low stock alert, supplier management.</p><p><b>Tech:</b> HTML, JS, Database</p><a class="btn" href="#">VIEW DEMO</a></div>
-<div class="sys"><h3>3. 🚛 Fleet & Driver Log</h3><p>Track 500+ trucks, fuel usage, maintenance, driver license expiry, trips Mokowe to Mombasa.</p><p><b>Tech:</b> GPS Ready</p><a class="btn" href="#">VIEW DEMO</a></div>
-<div class="sys"><h3>4. 📄 Document Tracking</h3><p>Track KRA PIN, Good Conduct, IDs, NSSF for 60k workers. Expiry alerts.</p><a class="btn" href="#">VIEW DEMO</a></div>
-<div class="sys"><h3>5. 💼 Recruitment Database</h3><p>60k applicants database, filter by skill (welder, mason, driver), county, certificate.</p><a class="btn" href="#">VIEW DEMO</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Management Systems by Muhsin - Lamu Refinery | SKYNET-CYBER SHIANDA</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f3f4f6}
+.nav{background:#fff;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.1);position:sticky;top:0;z-index:99}
+.logo{color:#0D4F8B;font-weight:900;font-size:16px}
+.menu a{background:#0D4F8B;color:#fff;padding:7px 12px;margin-left:4px;text-decoration:none;font-size:12px;font-weight:bold;border-radius:4px}
+.header{background:linear-gradient(135deg,#0a2a5a,#0D4F8B);color:#fff;padding:30px 15px;text-align:center}
+.header h1{color:#FFC000;font-size:28px;margin-bottom:5px}
+.header p{color:#cbd5e1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px;padding:20px}
+.sys{background:#fff;border:1px solid #e5e7eb;padding:20px;border-radius:10px;border-top:5px solid #0D4F8B;box-shadow:0 2px 6px rgba(0,0,0,.05);transition:.2s}
+.sys:hover{transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.1)}
+.sys h3{color:#0D4F8B;font-size:16px;margin-bottom:8px}
+.sys p{font-size:13px;color:#444;line-height:1.5;margin-bottom:6px}
+.badge{display:inline-block;background:#e0f2fe;color:#0D4F8B;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold;margin-bottom:8px}
+.badge.live{background:#dcfce7;color:#166534}
+.btn{display:inline-block;background:#FFC000;color:#000;padding:9px 16px;margin-top:10px;text-decoration:none;font-weight:bold;border-radius:5px;font-size:13px}
+.btn.dark{background:#111827;color:#FFC000}
+.pitch{background:#111827;color:#fff;padding:20px;text-align:center;margin:20px;border-radius:10px}
+.pitch h3{color:#FFC000;margin-bottom:8px}
+.footer{background:#0D4F8B;color:#fff;padding:15px;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="nav">
+<div class="logo">LAMU REFINERY SYSTEMS | MUHSIN</div>
+<div class="menu">
+<a href="index.html">HOME</a>
+<a href="systems.html">SYSTEMS</a>
+<a href="attendance.html">ATTENDANCE LIVE</a>
 </div>
-<div style="background:#111827;color:#fff;padding:20px;text-align:center;margin:20px;border-radius:8px"><h3 style="color:#FFC000">PITCH TO DANGOTE HR:</h3><p>"I built demo portal for Lamu Refinery + 5 offline management systems. I can deploy at Mokowe site next week. No internet needed."</p><p>Contact: Muhsin - SKYNET-CYBER SHIANDA | Mumias</p></div>
-</body></html>
+</div>
+
+<div class="header">
+<h1>MANAGEMENT SYSTEMS BY MUHSIN</h1>
+<p>SKYNET-CYBER SHIANDA, Shianda | Offline-Ready for Mokowe Site - Lamu Port</p>
+<p style="margin-top:8px;font-size:13px">Built for $16B Dangote East Africa Refinery | 60,000 Workers Support</p>
+</div>
+
+<div class="grid">
+
+<div class="sys" style="border-top-color:#22c55e">
+<span class="badge live">● LIVE & WORKING</span>
+<h3>1. 👷 Workers Attendance & Payroll</h3>
+<p><b>Problem:</b> 60,000 workers daily check-in/out at Mokowe site, no internet.</p>
+<p><b>Solution by Muhsin:</b> Daily check-in/out, auto overtime calc (8hrs normal + 1.5x OT), payslip generator, CSV export for HR. Works 100% offline using browser storage.</p>
+<p><b>Tech:</b> HTML, JavaScript, LocalStorage - No server needed</p>
+<a class="btn" href="attendance.html">✅ VIEW LIVE DEMO - CLICK HERE</a>
+</div>
+
+<div class="sys">
+<span class="badge">NEXT - STORE SYSTEM</span>
+<h3>2. 📦 Store Inventory System</h3>
+<p><b>Problem:</b> Track cement, steel, diesel, tools worth billions at site store.</p>
+<p><b>Solution:</b> Stock in/out, low stock alert (< 10 bags cement), supplier list, daily usage report. Prevents theft. Works offline.</p>
+<p><b>Tech:</b> HTML, JS, Database</p>
+<a class="btn dark" href="store.html">🚧 VIEW DEMO - BUILDING NEXT</a>
+</div>
+
+<div class="sys">
+<span class="badge">FLEET READY</span>
+<h3>3. 🚛 Fleet & Driver Log System</h3>
+<p><b>Problem:</b> 500+ trucks moving from Mombasa to Mokowe, fuel theft, license expiry.</p>
+<p><b>Solution:</b> Track fuel usage per trip, maintenance schedule, driver license expiry alert, trip Mokowe-Mombasa log. GPS ready.</p>
+<p><b>Tech:</b> GPS Tracking Ready</p>
+<a class="btn dark" href="fleet.html">🚧 VIEW DEMO - BUILDING NEXT</a>
+</div>
+
+<div class="sys">
+<span class="badge">DOCS TRACKER</span>
+<h3>4. 📄 Document Tracking System</h3>
+<p><b>Problem:</b> 60k workers each need ID, KRA PIN, NSSF, SHIF, Good Conduct, Certificates - expiry tracking.</p>
+<p><b>Solution:</b> Upload/check document status, expiry alert (30 days before), missing docs report for HR compliance.</p>
+<p><b>Tech:</b> Document Management</p>
+<a class="btn dark" href="documents.html">🚧 VIEW DEMO - BUILDING NEXT</a>
+</div>
+
+<div class="sys">
+<span class="badge">RECRUITMENT DB</span>
+<h3>5. 💼 Recruitment Database (60k)</h3>
+<p><b>Problem:</b> HR gets 100k applications - filter welders, masons, drivers by skill, county, experience.</p>
+<p><b>Solution:</b> 60k applicants searchable database, filter by skill, county, certificate, auto shortlist, SMS ready.</p>
+<p><b>Tech:</b> Searchable Database + SMS API</p>
+<a class="btn dark" href="recruitment.html">🚧 VIEW DEMO - BUILDING NEXT</a>
+</div>
+
+<div class="sys" style="border-top-color:#FFC000;background:#fffbeb">
+<span class="badge" style="background:#FFC000;color:#000">PITCH TO DANGOTE</span>
+<h3>💡 Why Hire Muhsin?</h3>
+<p>✅ I built demo portal BEFORE official one exists - proves initiative</p>
+<p>✅ All systems work offline - built for Mokowe where internet is weak</p>
+<p>✅ From Shianda/Mumias - I can relocate to Lamu next week</p>
+<p>✅ One package: Website + 5 internal systems = One contractor</p>
+<p><b>Asking:</b> IT Support / Systems Developer at Lamu Refinery</p>
+<a class="btn" href="index.html#contact">CONTACT MUHSIN NOW</a>
+</div>
+
+</div>
+
+<div class="pitch">
+<h3>PITCH TO DANGOTE HR & LAMU COUNTY:</h3>
+<p>"I have built a demo portal for Lamu Refinery and a working offline Attendance & Payroll system for 60,000 workers. 
+I am Muhsin from SKYNET-CYBER SHIANDA, Shianda. I can deploy all 5 systems at Mokowe site next week. No internet needed. 
+I am ready to work as IT Support / Systems Developer."</p>
+<br>
+<p>Contact: <b>Muhsin | SKYNET-CYBER SHIANDA</b> | Mumias/ Shianda | GitHub: muhinswaleh69-max | Vercel: lamu-refinery-lamu.vercel.app</p>
+</div>
+
+<div class="footer">
+© 2026 Lamu Refinery Systems Demo - Built by Muhsin, SKYNET-CYBER SHIANDA | Proposal for $16B Dangote East Africa Refinery Project | Mokowe, Lamu
+</div>
+
+</body>
+</html>
