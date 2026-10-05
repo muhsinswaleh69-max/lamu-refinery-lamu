@@ -1,22 +1,107 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Document Tracking - ERP LINKED</title><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:12px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold}.header{background:#111827;color:#fff;padding:12px;text-align:center}.container{padding:12px}.card{background:#fff;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px}th{background:#0D4F8B;color:#fff}button{padding:6px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}.check{width:18px;height:18px}</style>
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Document Tracking - ERP v2 Expiry Alerts</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{font-family:Arial;margin:0;background:#f4f6f9}
+.header{background:#1a237e;color:white;padding:12px;display:flex;justify-content:space-between}
+.alert-box{margin:10px;padding:12px;border-radius:8px}
+.alert-red{background:#ffebee;border-left:5px solid #d32f2f}
+.alert-yellow{background:#fff8e1;border-left:5px solid #ff9800}
+table{width:100%;border-collapse:collapse;background:white}
+th{background:#1a237e;color:white;padding:8px;font-size:12px}
+td{padding:6px;border-bottom:1px solid #ddd;font-size:13px;text-align:center}
+.expiry-input{width:130px}
+.verified{background:#c8e6c9}.pending{background:#fff3e0}
+.btn{padding:5px 10px;border:none;border-radius:4px;cursor:pointer;color:white}
+.btn-green{background:#2e7d32}.btn-orange{background:#ef6c00}
+.expired{color:red;font-weight:bold}.nearing{color:#ff9800;font-weight:bold}.ok{color:green}
+</style>
 </head><body>
-<div class="nav"><b>DOCUMENT TRACKING - ERP VERIFICATION ✅</b><a href="systems.html">SYSTEMS</a></div>
-<div class="header"><h2>📄 Document Verification → Unlocks Attendance/Fleet/Store</h2><p id="status" style="color:#FFC000">Connecting...</p><p style="font-size:11px">Tick ID, KRA, NSSF, SHIF, Good Conduct → Click VERIFY → Worker can check-in!</p></div>
-<div class="container"><div class="card"><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>ID</th><th>KRA</th><th>NSSF</th><th>SHIF</th><th>Good Conduct</th><th>Status</th><th>Action</th></tr></thead><tbody id="docTable"></tbody></table></div></div></div>
+<div class="header"><span>DOCUMENT TRACKING - ERP v2 + EXPIRY ALERTS ✅</span><a href="systems.html" style="color:#ff8a65;text-decoration:none;font-weight:bold">SYSTEMS</a></div>
+
+<div style="padding:10px;background:#000;color:white;text-align:center">
+<h3 style="margin:5px">📄 Document Verification → Unlocks Attendance/Fleet/Store + HR Expiry Alerts</h3>
+<div id="counts" style="color:orange"></div>
+<div id="hrAlerts"></div>
+</div>
+
+<table id="docTable">
+<thead><tr>
+<th>ID</th><th>Name</th><th>Skill</th><th>ID</th><th>KRA</th><th>NSSF</th><th>SHIF</th><th>Good Conduct</th><th>GC Issue</th><th>GC Expiry</th><th>Days Left</th><th>Status</th><th>Action</th>
+</tr></thead><tbody></tbody>
+</table>
+
 <script>
-const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_ECV6XUpesPYbEccQpwSx6A_5oyQxJmV";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-async function loadDocs(){let {data}=await sb.from('lamu_documents').select('*').order('created_at',{ascending:false}).limit(1000);let docs=data||[];document.getElementById('status').innerText="✅ Documents: "+docs.length+" | Pending: "+docs.filter(d=>!d.verified).length+" | Verified: "+docs.filter(d=>d.verified).length;let tb=document.getElementById('docTable');tb.innerHTML='';docs.forEach(d=>{tb.innerHTML+=`<tr style="${d.verified?'background:#dcfce7':''}"><td>${d.id}</td><td><b>${d.name}</b></td><td>${d.skill}</td><td><input type="checkbox" class="check" ${d.id_doc?'checked':''} onchange="updateDoc('${d.id}','id_doc',this.checked)"></td><td><input type="checkbox" class="check" ${d.kra?'checked':''} onchange="updateDoc('${d.id}','kra',this.checked)"></td><td><input type="checkbox" class="check" ${d.nssf?'checked':''} onchange="updateDoc('${d.id}','nssf',this.checked)"></td><td><input type="checkbox" class="check" ${d.shif?'checked':''} onchange="updateDoc('${d.id}','shif',this.checked)"></td><td><input type="checkbox" class="check" ${d.good_conduct?'checked':''} onchange="updateDoc('${d.id}','good_conduct',this.checked)"></td><td>${d.verified?'✅ Verified':'⏳ '+d.status}</td><td><button onclick="verifyDoc('${d.id}')" style="background:${d.verified?'#16a34a':'#f59e0b'};color:#fff">${d.verified?'Verified':'VERIFY 👆'}</button></td></tr>`});}
-async function updateDoc(id,field,val){await sb.from('lamu_documents').update({[field]:val}).eq('id',id);}
-async function verifyDoc(id){
- let {data}=await sb.from('lamu_documents').select('*').eq('id',id).single();
- if(!data.id_doc || !data.kra || !data.good_conduct){ if(!confirm('Documents not complete! Still verify?')) return; }
- await sb.from('lamu_documents').update({verified:true,status:'Verified'}).eq('id',id);
- alert('✅ '+data.name+' VERIFIED! Now can work in Attendance / Store / Fleet!');
- loadDocs();
+const supa = supabase.createClient('https://xbxzbszpephjgnxjszjn.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhieHpic3pwZXBoamdueGpzenpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwODUyNzYsImV4cCI6MjA3MzY2MTI3Nn0.CV0rV5Ov8c0YkVlV0t3V4X9B5Z6...');
+let docs=[];
+
+async function load(){
+ let {data} = await supa.from('lamu_documents').select('*').order('created_at',{ascending:false});
+ docs=data||[];
+ let verified = docs.filter(d=>d.verified).length;
+ document.getElementById('counts').innerHTML = `✅ Documents: ${docs.length} | Pending: ${docs.length-verified} | Verified: ${verified}`;
+ renderAlerts();
+ renderTable();
 }
-loadDocs();
+function daysLeft(expiry){
+ if(!expiry) return null;
+ let diff = Math.ceil((new Date(expiry) - new Date())/(1000*60*60*24));
+ return diff;
+}
+function renderAlerts(){
+ let expiring = docs.filter(d=>{
+   let dl = daysLeft(d.good_conduct_expiry);
+   return dl!==null && dl<=30;
+ });
+ let html='';
+ if(expiring.length>0){
+   html+=`<div class="alert-box alert-red">🚨 <b>HR ALERT: ${expiring.length} Good Conduct EXPIRED or <30 days!</b><br>`;
+   expiring.forEach(d=>{
+     let dl = daysLeft(d.good_conduct_expiry);
+     html+=`${d.name} (${d.id}) - Expiry: ${d.good_conduct_expiry} - ${dl<0? 'EXPIRED '+Math.abs(dl)+' days ago' : dl+' days left'} <br>`;
+   });
+   html+=`</div>`;
+ }
+ let nearing = docs.filter(d=>{let dl=daysLeft(d.good_conduct_expiry); return dl>30 && dl<=90});
+ if(nearing.length>0){
+   html+=`<div class="alert-box alert-yellow">⚠️ <b>Warning: ${nearing.length} Good Conduct expiring in 90 days</b><br>`;
+   nearing.forEach(d=>{html+=`${d.name} - ${d.good_conduct_expiry} (${daysLeft(d.good_conduct_expiry)} days left)<br>`});
+   html+=`</div>`;
+ }
+ document.getElementById('hrAlerts').innerHTML = html || '<div style="color:#4caf50">✅ All Good Conduct Valid</div>';
+}
+function renderTable(){
+ let tbody=document.querySelector('#docTable tbody'); tbody.innerHTML='';
+ docs.forEach(d=>{
+   let dl = daysLeft(d.good_conduct_expiry);
+   let dlText='', dlClass='ok';
+   if(dl===null) dlText='-';
+   else if(dl<0){dlText=`EXPIRED ${Math.abs(dl)}d ago`; dlClass='expired';}
+   else if(dl<=30){dlText=`${dl} days - URGENT`; dlClass='nearing';}
+   else if(dl<=90){dlText=`${dl} days`; dlClass='nearing';}
+   else dlText=`${dl} days`;
+
+   tbody.innerHTML+=`<tr class="${d.verified?'verified':'pending'}">
+   <td>${d.id}</td><td style="text-align:left">${d.name}</td><td>${d.skill}</td>
+   <td><input type="checkbox" ${d.id_doc?'checked':''} onchange="upd('${d.id}','id_doc',this.checked)"></td>
+   <td><input type="checkbox" ${d.kra?'checked':''} onchange="upd('${d.id}','kra',this.checked)"></td>
+   <td><input type="checkbox" ${d.nssf?'checked':''} onchange="upd('${d.id}','nssf',this.checked)"></td>
+   <td><input type="checkbox" ${d.shif?'checked':''} onchange="upd('${d.id}','shif',this.checked)"></td>
+   <td><input type="checkbox" ${d.good_conduct?'checked':''} onchange="upd('${d.id}','good_conduct',this.checked)"></td>
+   <td><input type="date" class="expiry-input" value="${d.good_conduct_issue||''}" onchange="upd('${d.id}','good_conduct_issue',this.value)"></td>
+   <td><input type="date" class="expiry-input" value="${d.good_conduct_expiry||''}" onchange="upd('${d.id}','good_conduct_expiry',this.value)"></td>
+   <td class="${dlClass}">${dlText}</td>
+   <td>${d.verified?'✅ Verified':'⏳ Pending'}</td>
+   <td><button class="btn ${d.verified?'btn-green':'btn-orange'}" onclick="verify('${d.id}')">${d.verified?'Verified':'VERIFY'}</button></td>
+   </tr>`;
+ });
+}
+async function upd(id,field,val){ await supa.from('lamu_documents').update({[field]:val}).eq('id',id); load(); }
+async function verify(id){
+ let rec = docs.find(x=>x.id==id);
+ if(!rec.id_doc||!rec.kra||!rec.nssf||!rec.shif||!rec.good_conduct){alert('Tick ALL 5 documents first!'); return;}
+ await supa.from('lamu_documents').update({verified:true,status:'Verified'}).eq('id',id);
+ load();
+}
+load();
 </script></body></html>
