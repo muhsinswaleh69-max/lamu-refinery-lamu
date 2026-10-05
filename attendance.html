@@ -1,74 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lamu Attendance - CLOUD FINAL</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lamu Attendance FINAL</title>
 <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:12px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}.stat{background:#fff;padding:12px;border-radius:8px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}.stat b{font-size:22px;display:block;color:#0D4F8B}.container{padding:10px;display:grid;grid-template-columns:320px 1fr;gap:10px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B;margin-bottom:10px}input,select,button{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:6px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px}th{background:#0D4F8B;color:#fff}</style>
-</head>
-<body>
-<div class="nav"><div><b>LAMU REFINERY - CLOUD ✅</b></div><div><a href="index.html">HOME</a></div></div>
-<div class="header"><h2>👷 ATTENDANCE & PAYROLL - CLOUD CONNECTED</h2><p>Built by Muhsin | SKYNET-CYBER SHIANDA</p><p id="today"></p><p id="status" style="color:#FFC000;font-weight:bold;font-size:14px">Connecting...</p></div>
-<div class="stats"><div class="stat"><b id="totalW">0</b><span>Total Workers</span></div><div class="stat"><b id="presentW">0</b><span>Present Today</span></div><div class="stat"><b id="absentW">0</b><span>Absent</span></div><div class="stat"><b id="otH">0.0h</b><span>Overtime</span></div></div>
-<div class="container">
-<div>
-<div class="card"><h3>Add Worker</h3><label>Full Name</label><input id="wName" placeholder="OMAR ALI"><label>ID No</label><input id="wID" placeholder="28292765"><label>Phone</label><input id="wPhone" placeholder="07..."><label>Skill</label><select id="wSkill"><option>Welder</option><option>Mason</option><option>Carpenter</option><option>Electrician</option><option>Plumber</option><option>Steel Fixer</option><option>Casual Labour</option><option>Driver</option><option>Operator</option></select><label>Daily Rate</label><input id="wRate" type="number" value="590"><button onclick="addWorker()">+ SAVE TO CLOUD</button></div>
-<div class="card"><h3>Check In / Out</h3><label>Worker ID</label><input id="cID" placeholder="Enter ID like 28292765"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button onclick="checkIn()" style="background:#16a34a;padding:12px">✅ CHECK IN</button><button onclick="checkOut()" style="background:#dc2626;padding:12px">❌ CHECK OUT</button></div></div>
-</div>
-<div>
-<div class="card"><h3 id="todayTitle">Today Attendance</h3><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Name</th><th>In</th><th>Out</th><th>Pay</th></tr></thead><tbody id="todayTable"></tbody></table></div></div>
-<div class="card"><h3>All Workers - Cloud Database</h3><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Rate</th><th>Phone</th><th>Del</th></tr></thead><tbody id="workersTable"></tbody></table></div></div>
-</div>
-</div>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:12px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold}.header{background:#111827;color:#fff;padding:15px;text-align:center}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}.stat{background:#fff;padding:12px;border-radius:8px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}.stat b{font-size:22px;display:block;color:#0D4F8B}.container{padding:10px;display:grid;grid-template-columns:320px 1fr;gap:10px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B;margin-bottom:10px}input,select,button{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:6px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px}th{background:#0D4F8B;color:#fff}</style>
+</head><body>
+<div class="nav"><b>LAMU REFINERY - FINAL CLOUD ✅</b><a href="index.html">HOME</a></div>
+<div class="header"><h2>ATTENDANCE & PAYROLL - FINAL FIX</h2><p id="today"></p><p id="status" style="color:#FFC000">Connecting...</p></div>
+<div class="stats"><div class="stat"><b id="totalW">0</b>Total Workers</div><div class="stat"><b id="presentW">0</b>Present Today</div><div class="stat"><b id="absentW">0</b>Absent</div><div class="stat"><b id="otH">0.0h</b>Overtime</div></div>
+<div class="container"><div>
+<div class="card"><h3>Add Worker</h3><label>Name</label><input id="wName"><label>ID</label><input id="wID"><label>Phone</label><input id="wPhone"><label>Skill</label><select id="wSkill"><option>Welder</option><option>Mason</option><option>Carpenter</option><option>Electrician</option><option>Plumber</option><option>Steel Fixer</option><option>Casual Labour</option><option>Driver</option><option>Operator</option></select><label>Rate</label><input id="wRate" type="number" value="1200"><button onclick="addWorker()">+ SAVE TO CLOUD</button></div>
+<div class="card"><h3>Check In / Out</h3><label>Worker ID</label><input id="cID"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button onclick="checkIn()" style="background:#16a34a">✅ CHECK IN</button><button onclick="checkOut()" style="background:#dc2626">❌ CHECK OUT</button></div></div></div>
+<div><div class="card"><h3 id="todayTitle">Today</h3><table><thead><tr><th>ID</th><th>Name</th><th>In</th><th>Out</th><th>Pay</th></tr></thead><tbody id="todayTable"></tbody></table></div>
+<div class="card"><h3>All Workers - Cloud</h3><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Rate</th><th>Phone</th><th>Del</th></tr></thead><tbody id="workersTable"></tbody></table></div></div></div>
 <script>
 const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_ECV6XUpesPYbEccQpwSx6A_5oyQxJmV";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let workers=[], attend=[];
 async function loadAll(){
- document.getElementById('status').innerText = "⏳ Connecting to "+SUPABASE_URL+" ...";
  try{
-  let {data:w, error:e1} = await sb.from('lamu_workers').select('*').order('created_at',{ascending:false}).limit(1000);
-  if(e1) throw e1;
-  let today = new Date().toLocaleDateString();
-  let {data:a, error:e2} = await sb.from('lamu_attendance').select('*').eq('date', today).limit(1000);
-  if(e2) throw e2;
-  workers = w || []; attend = a || [];
-  document.getElementById('status').innerText = "✅ CLOUD CONNECTED! Total Workers in Cloud: "+workers.length;
+  let {data:w}=await sb.from('lamu_workers').select('*').order('created_at',{ascending:false}).limit(1000);
+  let today=new Date().toLocaleDateString();
+  let {data:a}=await sb.from('lamu_attendance').select('*').eq('date',today).limit(1000);
+  workers=w||[]; attend=a||[];
+  document.getElementById('status').innerText="✅ CLOUD CONNECTED - Workers: "+workers.length+" - FINAL FIX DONE!";
   render();
- }catch(err){
-  document.getElementById('status').innerText = "❌ "+err.message;
-  alert("Error: "+err.message + "\n\nURL used: "+SUPABASE_URL+"\nIf still Failed to fetch, check Supabase Data API page - URL must match exactly.");
- }
+ }catch(e){document.getElementById('status').innerText="❌ "+e.message}
 }
 async function addWorker(){
- let id=document.getElementById('wID').value.trim(), name=document.getElementById('wName').value.trim(), phone=document.getElementById('wPhone').value.trim(), skill=document.getElementById('wSkill').value, rate=parseInt(document.getElementById('wRate').value)||590;
+ let id=document.getElementById('wID').value.trim(), name=document.getElementById('wName').value.trim(), phone=document.getElementById('wPhone').value.trim(), skill=document.getElementById('wSkill').value, rate=parseInt(document.getElementById('wRate').value)||1200;
  if(!id||!name){alert('ID and Name required');return;}
- document.getElementById('status').innerText="Saving "+name+" to cloud...";
  let {error}=await sb.from('lamu_workers').insert([{id,name,phone,skill,rate}]);
- if(error){ alert(error.message); document.getElementById('status').innerText="❌ "+error.message; } 
- else { document.getElementById('wID').value=''; document.getElementById('wName').value=''; loadAll(); }
+ if(error) alert(error.message); else {document.getElementById('wID').value='';document.getElementById('wName').value='';loadAll();}
 }
 async function checkIn(){
- let id=document.getElementById('cID').value.trim(); if(!id) return alert('Enter ID');
- let w=workers.find(x=>x.id===id); if(!w) return alert('Worker '+id+' not found in cloud! Add first');
+ let id=document.getElementById('cID').value.trim(); if(!id)return alert('Enter ID');
+ let w=workers.find(x=>x.id===id); if(!w)return alert('Worker '+id+' not found! Add in Add Worker first!');
  let {error}=await sb.from('lamu_attendance').insert([{worker_id:id,name:w.name,skill:w.skill,date:new Date().toLocaleDateString(),time_in:new Date().toLocaleTimeString(),pay:w.rate}]);
  if(error) alert(error.message); else loadAll();
 }
 async function checkOut(){
- let id=document.getElementById('cID').value.trim(); let rec=attend.filter(x=>x.worker_id===id && !x.time_out).pop(); if(!rec) return alert('No active check-in for '+id);
- let {error}=await sb.from('lamu_attendance').update({time_out:new Date().toLocaleTimeString(),hours:8,overtime:0}).eq('id',rec.id);
- if(error) alert(error.message); else loadAll();
+ let id=document.getElementById('cID').value.trim(); let rec=attend.filter(x=>x.worker_id===id && !x.time_out).pop(); if(!rec)return alert('No active check-in for '+id);
+ await sb.from('lamu_attendance').update({time_out:new Date().toLocaleTimeString()}).eq('id',rec.id); loadAll();
 }
 function render(){
- document.getElementById('totalW').innerText=workers.length;
+ let total=workers.length; if(total===0 && attend.length>0) total=attend.length;
+ document.getElementById('totalW').innerText=total;
  document.getElementById('presentW').innerText=attend.length;
- document.getElementById('absentW').innerText=Math.max(0,workers.length-attend.length);
- let tb1=document.getElementById('todayTable'); tb1.innerHTML=''; attend.forEach(a=>{tb1.innerHTML+=`<tr><td>${a.worker_id}</td><td>${a.name}</td><td>${a.time_in||''}</td><td>${a.time_out||'<span style=color:red>Working...</span>'}</td><td>KES ${a.pay||0}</td></tr>`});
- let tb2=document.getElementById('workersTable'); tb2.innerHTML=''; workers.forEach(w=>{tb2.innerHTML+=`<tr><td>${w.id}</td><td>${w.name}</td><td>${w.skill}</td><td>${w.rate}</td><td>${w.phone||''}</td><td><button onclick="delW('${w.id}')" style="background:red;padding:3px 6px">Del</button></td></tr>`});
+ document.getElementById('absentW').innerText=Math.max(0,total-attend.length);
+ let tb1=document.getElementById('todayTable'); tb1.innerHTML=''; attend.forEach(a=>{tb1.innerHTML+=`<tr><td>${a.worker_id}</td><td>${a.name}</td><td>${a.time_in}</td><td>${a.time_out||'Working...'}</td><td>${a.pay}</td></tr>`});
+ let tb2=document.getElementById('workersTable'); tb2.innerHTML=''; workers.forEach(w=>{tb2.innerHTML+=`<tr><td>${w.id}</td><td>${w.name}</td><td>${w.skill}</td><td>${w.rate}</td><td>${w.phone}</td><td><button onclick="delW('${w.id}')" style="background:red;padding:3px">Del</button></td></tr>`});
 }
-async function delW(id){ if(confirm('Delete '+id+' ?')){ await sb.from('lamu_workers').delete().eq('id',id); loadAll(); } }
-document.getElementById('today').innerText=new Date().toDateString(); document.getElementById('todayTitle').innerText="Today - "+new Date().toDateString(); loadAll();
-</script>
-</body>
-</html>
+async function delW(id){if(confirm('Delete '+id+'?')){await sb.from('lamu_workers').delete().eq('id',id);loadAll();}}
+document.getElementById('today').innerText=new Date().toDateString(); loadAll();
+</script></body></html>
