@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Store Inventory - Lamu Refinery | SKYNET-CYBER SHIANDA</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:10px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.header b{color:#FFC000}.container{padding:15px;display:grid;grid-template-columns:1fr 2fr;gap:15px}@media(max-width:800px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}input,select,button{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:4px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#0D4F8B;color:#fff}.low{background:#fee2e2;color:#b91c1c;font-weight:bold}.ok{background:#dcfce7;color:#166534;font-weight:bold}</style>
+</head><body>
+<div class="nav"><div><b>LAMU REFINERY</b> - Store Inventory | SKYNET-CYBER SHIANDA</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
+<div class="header"><h2>📦 STORE INVENTORY SYSTEM</h2><p>Built by <b>Muhsin</b> - Offline Ready for Mokowe | Cement, Steel, Fuel, Tools</p><p id="today"></p></div>
+<div class="container">
+<div class="card">
+<h3>Add / Stock In</h3>
+<input id="itemName" placeholder="Item Name (e.g. Cement Bamburi)">
+<select id="category"><option>Cement</option><option>Steel</option><option>Fuel Diesel</option><option>Fuel Petrol</option><option>Tools</option><option>Safety Gear</option><option>Other</option></select>
+<input id="qty" type="number" placeholder="Quantity (e.g. 100)">
+<input id="unit" placeholder="Unit (bags, kg, litres, pcs)">
+<input id="supplier" placeholder="Supplier (e.g. Mombasa Cement)">
+<button onclick="addStock()">+ ADD TO STORE</button>
+<hr style="margin:10px 0">
+<h3>Stock Out (Use)</h3>
+<input id="outID" placeholder="Item ID to deduct">
+<input id="outQty" type="number" placeholder="Qty used">
+<input id="usedBy" placeholder="Used by / Department">
+<button style="background:#dc2626" onclick="stockOut()">- STOCK OUT</button>
+<button style="background:green;margin-top:10px" onclick="exportCSV()">📥 EXPORT EXCEL</button>
+</div>
+<div class="card">
+<h3>Current Store Stock</h3>
+<div style="overflow-x:auto">
+<table><thead><tr><th>ID</th><th>Item</th><th>Cat</th><th>Qty Left</th><th>Unit</th><th>Status</th><th>Supplier</th><th>Action</th></tr></thead><tbody id="storeTable"></tbody></table>
+</div>
+</div>
+</div>
+<script>
+let store=JSON.parse(localStorage.getItem('lamu_store')||'[]');
+function save(){localStorage.setItem('lamu_store',JSON.stringify(store));render();}
+function addStock(){
+ let name=document.getElementById('itemName').value.trim(), cat=document.getElementById('category').value, q=parseInt(document.getElementById('qty').value)||0, u=document.getElementById('unit').value.trim()||'pcs', sup=document.getElementById('supplier').value.trim();
+ if(!name||q<=0){alert('Enter item and qty');return;}
+ let exist=store.find(s=>s.name.toLowerCase()==name.toLowerCase());
+ if(exist){exist.qty+=q;save();} else {let id='ST'+(1000+store.length+1); store.push({id:id,name:name,cat:cat,qty:q,unit:u,supplier:sup});save();}
+ document.getElementById('itemName').value='';document.getElementById('qty').value='';document.getElementById('supplier').value='';
+}
+function stockOut(){
+ let id=document.getElementById('outID').value.trim(), q=parseInt(document.getElementById('outQty').value)||0, by=document.getElementById('usedBy').value.trim();
+ let item=store.find(s=>s.id==id); if(!item){alert('ID not found');return;} if(q>item.qty){alert('Not enough stock');return;}
+ item.qty-=q; save(); alert(q+' '+item.unit+' of '+item.name+' used by '+by);
+ document.getElementById('outID').value='';document.getElementById('outQty').value='';document.getElementById('usedBy').value='';
+}
+function render(){
+ let tb=document.getElementById('storeTable'); tb.innerHTML='';
+ store.forEach(s=>{
+  let status=s.qty<10?'<span class="low">LOW STOCK!</span>':s.qty<50?'<span style="background:#fef9c3;padding:2px 6px">Medium</span>':'<span class="ok">OK</span>';
+  tb.innerHTML+=`<tr><td>${s.id}</td><td>${s.name}</td><td>${s.cat}</td><td><b>${s.qty}</b></td><td>${s.unit}</td><td>${status}</td><td>${s.supplier}</td><td><button onclick="delItem('${s.id}')" style="background:red;padding:2px 6px;font-size:11px">Del</button></td></tr>`;
+ });
+}
+function delItem(id){if(confirm('Delete item?')){store=store.filter(s=>s.id!=id);save();}}
+function exportCSV(){let csv='ID,Item,Category,Qty,Unit,Supplier\n';store.forEach(s=>{csv+=`${s.id},${s.name},${s.cat},${s.qty},${s.unit},${s.supplier}\n`;});let blob=new Blob([csv],{type:'text/csv'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Lamu_Store_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+document.getElementById('today').innerText=new Date().toDateString(); render();
+</script>
+</body></html>
