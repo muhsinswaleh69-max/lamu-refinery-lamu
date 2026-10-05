@@ -1,82 +1,15 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fleet & Driver Log - Lamu Refinery | SKYNET-CYBER SHIANDA</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:10px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.header b{color:#FFC000}.container{padding:15px;display:grid;grid-template-columns:1fr 2fr;gap:15px}@media(max-width:800px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}input,select,button{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:4px}label{font-size:12px;font-weight:bold;color:#0D4F8B;margin-top:8px;display:block}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#0D4F8B;color:#fff}.exp{background:#fee2e2;color:#b91c1c;font-weight:bold;padding:2px 6px;border-radius:4px}.ok{background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px}.warn{background:#fef9c3;padding:2px 6px;border-radius:4px}</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fleet Log - ERP LINKED</title><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:12px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold}.header{background:#111827;color:#fff;padding:12px;text-align:center}.card{background:#fff;padding:12px;border-radius:8px;margin:12px;box-shadow:0 2px 6px rgba(0,0,0,.1)}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px}th{background:#0D4F8B;color:#fff}input,button{padding:8px;margin:4px;border:1px solid #ddd;border-radius:6px}button{background:#0D4F8B;color:#fff;font-weight:bold}</style>
 </head><body>
-<div class="nav"><div><b>LAMU REFINERY</b> - Fleet System | SKYNET-CYBER SHIANDA</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
-<div class="header"><h2>🚛 FLEET & DRIVER LOG SYSTEM</h2><p>Built by <b>Muhsin</b> - Offline Ready for Mombasa-Mokowe</p><p id="today"></p></div>
-<div class="container">
-<div class="card">
-<h3>Add Truck / Driver</h3>
-<label>Vehicle Plate Number</label>
-<input id="plate" placeholder="e.g. KDM 123A">
-<label>Vehicle Type</label>
-<input id="truckType" placeholder="Tipper, Lorry, Pickup">
-<label>Driver Full Name</label>
-<input id="driverName" placeholder="e.g. Benard Onyango">
-<label>Driver National ID No</label>
-<input id="driverID" placeholder="e.g. 23456789">
-<label>Driving license Expiry Date</label>
-<input id="licenseExp" type="date">
-<label>Driver Phone Number</label>
-<input id="phone" placeholder="e.g. 0721741834">
-<button onclick="addTruck()">+ ADD TRUCK</button>
-<hr style="margin:12px 0">
-<h3>Log Trip / Fuel</h3>
-<label>Plate No</label>
-<input id="tripPlate" placeholder="e.g. KDM 234T">
-<label>Route</label>
-<select id="tripRoute"><option>Mombasa -> Mokowe</option><option>Mokowe -> Mombasa</option><option>Mokowe -> Lamu Town</option><option>Site Internal</option></select>
-<label>Fuel Used</label>
-<input id="fuel" type="number" placeholder="Litres">
-<label>Distance</label>
-<input id="km" type="number" placeholder="KM">
-<button style="background:#16a34a" onclick="logTrip()">✅ LOG TRIP</button>
-<button style="background:green;margin-top:10px" onclick="exportCSV()">📥 EXPORT EXCEL</button>
-</div>
-<div class="card">
-<h3>Current Fleet - Status Check</h3>
-<div style="overflow-x:auto">
-<table><thead><tr><th>Plate</th><th>Type</th><th>Driver</th><th>ID</th><th>Phone</th><th>License Expiry</th><th>Status</th><th>Trips</th><th>Fuel</th><th>Action</th></tr></thead><tbody id="fleetTable"></tbody></table>
-</div>
-<h3 style="margin-top:15px">Trip Log Today</h3>
-<div style="overflow-x:auto">
-<table><thead><tr><th>Time</th><th>Plate</th><th>Route</th><th>Fuel L</th><th>KM</th><th>KM/L</th><th>Driver</th></tr></thead><tbody id="tripTable"></tbody></table>
-</div>
-</div>
-</div>
+<div class="nav"><b>FLEET & DRIVER LOG - ERP AUTO ✅</b><a href="systems.html">SYSTEMS</a></div>
+<div class="header"><h2>🚛 Fleet - Drivers auto from Recruitment</h2><p id="status" style="color:#FFC000">Connecting...</p></div>
+<div class="card"><table><thead><tr><th>ID</th><th>Driver</th><th>Plate</th><th>License Expiry</th><th>Skill</th><th>Update Plate</th></tr></thead><tbody id="fleetTable"></tbody></table></div>
 <script>
-let fleet=JSON.parse(localStorage.getItem('lamu_fleet')||'[]');
-let trips=JSON.parse(localStorage.getItem('lamu_trips_'+new Date().toDateString())||'[]');
-function save(){localStorage.setItem('lamu_fleet',JSON.stringify(fleet));localStorage.setItem('lamu_trips_'+new Date().toDateString(),JSON.stringify(trips));render();}
-function addTruck(){
- let plate=document.getElementById('plate').value.trim().toUpperCase(), type=document.getElementById('truckType').value.trim(), dName=document.getElementById('driverName').value.trim(), dID=document.getElementById('driverID').value.trim(), lic=document.getElementById('licenseExp').value, ph=document.getElementById('phone').value.trim();
- if(!plate||!dName){alert('Enter Plate and Driver');return;}
- if(fleet.find(f=>f.plate==plate)){alert('Truck exists');return;}
- if(!lic){alert('Select Driving license Expiry Date');return;}
- fleet.push({plate:plate,type:type,driver:dName,driverID:dID,license:lic,phone:ph,trips:0,fuel:0});
- document.getElementById('plate').value='';document.getElementById('driverName').value='';document.getElementById('driverID').value='';document.getElementById('phone').value='';document.getElementById('truckType').value='';document.getElementById('licenseExp').value='';
- save();
-}
-function logTrip(){
- let plate=document.getElementById('tripPlate').value.trim().toUpperCase(), route=document.getElementById('tripRoute').value, fuel=parseInt(document.getElementById('fuel').value)||0, km=parseInt(document.getElementById('km').value)||0;
- let truck=fleet.find(f=>f.plate==plate); if(!truck){alert('Truck not found!');return;}
- truck.trips++; truck.fuel+=fuel; trips.push({time:new Date().toLocaleTimeString(),plate:plate,route:route,fuel:fuel,km:km,driver:truck.driver});
- document.getElementById('tripPlate').value='';document.getElementById('fuel').value='';document.getElementById('km').value=''; save();
-}
-function render(){
- let ft=document.getElementById('fleetTable'); ft.innerHTML='';
- fleet.forEach(f=>{
-  let expDate=new Date(f.license); let today=new Date(); today.setHours(0,0,0,0);
-  let diff=Math.ceil((expDate-today)/86400000);
-  let licStatus=diff<0?'<span class="exp">EXPIRED!</span>':diff<30?'<span class="warn">Expiring in '+diff+'d</span>':'<span class="ok">Valid</span>';
-  ft.innerHTML+=`<tr><td><b>${f.plate}</b></td><td>${f.type}</td><td>${f.driver}</td><td>${f.driverID}</td><td>${f.phone}</td><td>${f.license}</td><td>${licStatus}</td><td>${f.trips}</td><td>${f.fuel}L</td><td><button onclick="delTruck('${f.plate}')" style="background:red;padding:2px 6px;font-size:11px">Del</button></td></tr>`;
- });
- let tt=document.getElementById('tripTable'); tt.innerHTML='';
- trips.forEach(t=>{let kml=t.fuel>0?(t.km/t.fuel).toFixed(1):'-'; tt.innerHTML+=`<tr><td>${t.time}</td><td>${t.plate}</td><td>${t.route}</td><td>${t.fuel}</td><td>${t.km}</td><td>${kml}</td><td>${t.driver}</td></tr>`;});
-}
-function delTruck(p){if(confirm('Delete?')){fleet=fleet.filter(f=>f.plate!=p);save();}}
-function exportCSV(){let csv='Plate,Type,Driver,ID,Phone,LicenseExpiry,Trips,Fuel\n';fleet.forEach(f=>{csv+=`${f.plate},${f.type},${f.driver},${f.driverID},${f.phone},${f.license},${f.trips},${f.fuel}\n`;});let blob=new Blob([csv],{type:'text/csv'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Fleet_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
-document.getElementById('today').innerText='Today: '+new Date().toDateString(); render();
-</script>
-</body></html>
+const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ECV6XUpesPYbEccQpwSx6A_5oyQxJmV";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function loadFleet(){let {data}=await sb.from('lamu_fleet').select('*').order('created_at',{ascending:false});let f=data||[];document.getElementById('status').innerText="✅ Fleet Drivers: "+f.length+" (Auto from Recruitment when Hired as Driver/Operator)";let tb=document.getElementById('fleetTable');tb.innerHTML='';f.forEach(r=>{tb.innerHTML+=`<tr><td>${r.id}</td><td>${r.driver_name}</td><td><input id="plate_${r.id}" value="${r.plate}" placeholder="KAA 123X"></td><td><input id="exp_${r.id}" value="${r.license_expiry}" type="date"></td><td>${r.skill}</td><td><button onclick="saveFleet('${r.id}')">Save</button></td></tr>`});}
+async function saveFleet(id){let plate=document.getElementById('plate_'+id).value, exp=document.getElementById('exp_'+id).value; await sb.from('lamu_fleet').update({plate,license_expiry:exp}).eq('id',id); alert('✅ Saved!'); loadFleet();}
+loadFleet();
+</script></body></html>
