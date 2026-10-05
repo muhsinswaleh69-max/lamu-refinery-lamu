@@ -1,38 +1,101 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Recruitment - FIXED</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lamu Refinery - Recruitment ERP</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{font-family:Arial;margin:0;background:#f4f6f9}th{background:#1a237e;color:#fff;padding:6px}td{padding:6px;border-bottom:1px solid #ddd}</style>
-</head><body>
-<h3 style="background:#1a237e;color:#fff;padding:10px">Recruitment - ERP Fixed ✅ | <a href="systems.html" style="color:orange">SYSTEMS</a></h3>
-<div style="display:flex;gap:10px;padding:10px">
-<div style="width:300px;background:#fff;padding:10px;border-radius:8px">
-<h4>Add Applicant</h4>
-<input id="rid" placeholder="ID e.g. 37966445" style="width:100%;margin:5px 0;padding:8px"><br>
-<input id="rname" placeholder="Name e.g. JEROM SAKWA" style="width:100%;margin:5px 0;padding:8px"><br>
-<input id="rphone" placeholder="Phone e.g. 0788990099" style="width:100%;margin:5px 0;padding:8px"><br>
-<select id="rvillage" style="width:100%;margin:5px 0;padding:8px"><option>Mokowe</option><option>Lamu</option><option>Hindi</option></select>
-<select id="rskill" style="width:100%;margin:5px 0;padding:8px"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Steel Fixer</option><option>Driver</option><option>Operator</option><option>Engineer</option></select>
-<input id="rexp" type="number" placeholder="Exp Years e.g. 7" style="width:100%;margin:5px 0;padding:8px"><br>
-<select id="rstatus" style="width:100%;margin:5px 0;padding:8px"><option>New Applicant</option><option>Shortlisted</option><option>Hired</option></select><br>
-<button onclick="save()" style="width:100%;padding:10px;background:#1a237e;color:#fff;border:none;border-radius:5px;cursor:pointer">+ SAVE TO CLOUD</button>
-<div id="msg" style="color:green;margin-top:10px"></div>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial, sans-serif;margin:0;background:#eef2f7}
+.header{background:#1a237e;color:#fff;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+.header a{color:#ffab40;text-decoration:none;font-weight:bold}
+.container{display:flex;gap:15px;padding:15px;flex-wrap:wrap}
+.left{width:320px;background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);height:fit-content}
+.right{flex:1;background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);min-width:600px;overflow:auto}
+input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px;font-size:14px}
+button.save{width:100%;padding:12px;background:#1a237e;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:10px}
+button.save:hover{background:#283593}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:#1a237e;color:#fff;padding:8px 6px;font-size:12px;text-align:left}
+td{padding:7px 6px;border-bottom:1px solid #ddd;font-size:13px}
+.badge{padding:3px 8px;border-radius:10px;font-size:11px;color:#fff}
+.badge-hired{background:#2e7d32}.badge-new{background:#616161}.badge-short{background:#ef6c00}
+#msg{margin-top:10px;padding:8px;border-radius:5px;font-size:13px}
+.success{background:#c8e6c9;color:#2e7d32}.error{background:#ffcdd2;color:#c62828}
+</style>
+</head>
+<body>
+<div class="header">
+<span>Recruitment - ERP Fixed ✅</span>
+<a href="systems.html">SYSTEMS</a>
 </div>
-<div style="flex:1;background:#fff;padding:10px;border-radius:8px;overflow:auto">
-<table style="width:100%;border-collapse:collapse"><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead><tbody id="tbody"></tbody></table>
+
+<div class="container">
+<div class="left">
+<h3 style="margin:0 0 10px">Add Applicant</h3>
+<label>ID</label>
+<input id="rid" placeholder="e.g. 98765432">
+<label>Name</label>
+<input id="rname" placeholder="e.g. JEROM SAKWA">
+<label>Phone</label>
+<input id="rphone" placeholder="e.g. 0789900987">
+<label>Village</label>
+<select id="rvillage"><option>Mokowe</option><option>Lamu</option><option>Hindi</option><option>Mpeketoni</option><option>Witu</option></select>
+<label>Skill</label>
+<select id="rskill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Steel Fixer</option><option>Welder</option><option>Plumber</option><option>Electrician</option><option>Driver</option><option>Operator</option><option>Foreman</option><option>Engineer</option></select>
+<label>Exp (Years)</label>
+<input id="rexp" type="number" placeholder="e.g. 7" value="2">
+<label>Status</label>
+<select id="rstatus"><option>New Applicant</option><option>Shortlisted</option><option selected>Hired</option></select>
+<button class="save" onclick="saveApplicant()">+ SAVE TO CLOUD</button>
+<div id="msg"></div>
+<div style="margin-top:15px;font-size:11px;color:#666;background:#fff8e1;padding:8px;border-radius:5px">
+<b>ERP Flow:</b><br>
+Hired → Auto to Documents (with 1yr Good Conduct expiry) → Attendance → Fleet (if Driver/Operator) → Store
 </div>
 </div>
+
+<div class="right">
+<h3 style="margin:0">Applicants Database</h3>
+<div id="count" style="color:#1a237e;font-weight:bold;margin:8px 0">Loading...</div>
+<table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead>
+<tbody id="tbody"></tbody></table>
+</div>
+</div>
+
 <script>
-const SUPA_URL='https://xbxzbszpephjgnxjszjn.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhieHpic3pwZXBoamdueGpzenpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwODUyNzYsImV4cCI6MjA3MzY2MTI3Nn0.CV0rV5Ov8c0YkVlV0t3V4X9B5Z6YxXxX'; // REPLACE WITH YOUR REAL KEY FROM OLD FILE
-const client=supabase.createClient(SUPA_URL,SUPA_KEY);
-async function load(){
- let {data}=await client.from('lamu_recruitment').select('*').order('created_at',{ascending:false});
- let tb=document.getElementById('tbody'); tb.innerHTML='';
- (data||[]).forEach(r=>{
-   tb.innerHTML+=`<tr><td>${r.id}</td><td>${r.name}</td><td>${r.phone}</td><td>${r.village}</td><td>${r.skill}</td><td>${r.experience||r.exp||''}yr</td><td>${r.status}</td></tr>`;
- });
+// ====== PASTE YOUR REAL KEY HERE ======
+const SUPA_URL = 'https://xbxzbszpephjgnxjszjn.supabase.co';
+const SUPA_KEY = 'PASTE_YOUR_REAL_ANON_KEY_HERE'; // <-- Replace this with your anon key from Supabase Settings -> API
+// ======================================
+
+const client = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+async function loadApplicants(){
+ try{
+   let {data,error} = await client.from('lamu_recruitment').select('*').order('created_at',{ascending:false});
+   if(error) throw error;
+   document.getElementById('count').innerText = `Total Applicants: ${data.length}`;
+   let tb=document.getElementById('tbody'); tb.innerHTML='';
+   data.forEach(r=>{
+     let badge = r.status==='Hired'?'badge-hired':(r.status==='Shortlisted'?'badge-short':'badge-new');
+     tb.innerHTML+=`<tr>
+       <td>${r.id}</td>
+       <td style="font-weight:bold">${r.name}</td>
+       <td>${r.phone||''}</td>
+       <td>${r.village||''}</td>
+       <td>${r.skill||''}</td>
+       <td>${r.experience||0}yr</td>
+       <td><span class="badge ${badge}">${r.status}</span></td>
+     </tr>`;
+   });
+ }catch(e){
+   document.getElementById('count').innerText = 'Error: '+e.message;
+ }
 }
-async function save(){
+
+async function saveApplicant(){
  let id=document.getElementById('rid').value.trim();
  let name=document.getElementById('rname').value.trim().toUpperCase();
  let phone=document.getElementById('rphone').value.trim();
@@ -40,19 +103,48 @@ async function save(){
  let skill=document.getElementById('rskill').value;
  let exp=parseInt(document.getElementById('rexp').value)||0;
  let status=document.getElementById('rstatus').value;
- if(!id||!name){alert('Enter ID and Name');return;}
- // FIXED: NO 'date' column! Only columns that exist!
- let {error}=await client.from('lamu_recruitment').upsert([{id, name, phone, village, skill, experience: exp, status}], {onConflict:'id'});
- if(error){alert('Save failed: '+error.message); return;}
- document.getElementById('msg').innerText='Saved! '+name;
- load();
- // Auto create in other ERP tables if Hired
- if(status==='Hired'){
-   await client.from('lamu_documents').upsert([{id, name, phone, skill, good_conduct_issue: new Date().toISOString().split('T')[0], good_conduct_expiry: new Date(Date.now()+365*86400000).toISOString().split('T')[0]}], {onConflict:'id'});
-   await client.from('lamu_workers').upsert([{id, name, phone, skill}], {onConflict:'id'});
-   if(skill==='Driver'||skill==='Operator') await client.from('lamu_fleet').upsert([{id, driver_name:name, skill, plate:'TBD'}], {onConflict:'id'});
+ let msg=document.getElementById('msg');
+
+ if(!id||!name){ msg.className='error'; msg.innerText='Enter ID and Name!'; return; }
+ msg.className=''; msg.innerText='Saving...';
+
+ try{
+   // 1. Save to recruitment - NO 'date' COLUMN - ONLY VALID COLUMNS
+   let {error:err1} = await client.from('lamu_recruitment').upsert([{id, name, phone, village, skill, experience: exp, status}], {onConflict:'id'});
+   if(err1) throw err1;
+
+   // 2. If Hired, auto-create ERP chain with 1 year Good Conduct expiry
+   if(status==='Hired'){
+     let today = new Date().toISOString().split('T')[0];
+     let expiry = new Date(); expiry.setFullYear(expiry.getFullYear()+1);
+     let expiryStr = expiry.toISOString().split('T')[0];
+
+     await client.from('lamu_documents').upsert([{
+       id, name, phone, skill,
+       id_doc:true, kra:true, nssf:true, shif:true, good_conduct:true,
+       verified:true, status:'Verified',
+       good_conduct_issue: today,
+       good_conduct_expiry: expiryStr
+     }], {onConflict:'id'});
+
+     await client.from('lamu_workers').upsert([{id, name, phone, skill, rate:1500}], {onConflict:'id'});
+
+     if(skill==='Driver' || skill==='Operator'){
+       await client.from('lamu_fleet').upsert([{id, driver_name:name, skill, plate:'TBD', license_expiry:'2027-12-31'}], {onConflict:'id'});
+     }
+   }
+
+   msg.className='success'; msg.innerText='✅ Saved! '+name+' - '+status;
+   loadApplicants();
+   // Clear form
+   document.getElementById('rid').value=''; document.getElementById('rname').value=''; document.getElementById('rphone').value='';
+ }catch(e){
+   msg.className='error'; msg.innerText='Save failed: '+e.message;
+   console.log(e);
  }
 }
-load();
+
+loadApplicants();
 </script>
-</body></html>
+</body>
+</html>
