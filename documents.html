@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Document Tracking - Lamu Refinery | SKYNET-CYBER SHIANDA</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:10px 15px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:10px}.header{background:#111827;color:#fff;padding:15px;text-align:center}.header b{color:#FFC000}.container{padding:15px;display:grid;grid-template-columns:1fr 2.5fr;gap:15px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B}input,select,button{width:100%;padding:7px;margin:4px 0;border:1px solid #ddd;border-radius:4px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}th,td{border:1px solid #ddd;padding:5px;text-align:left}th{background:#0D4F8B;color:#fff}.exp{background:#fee2e2;color:#b91c1c;font-weight:bold;padding:2px 5px;border-radius:3px}.ok{background:#dcfce7;color:#166534;padding:2px 5px;border-radius:3px}.warn{background:#fef9c3;padding:2px 5px;border-radius:3px}.miss{background:#e5e7eb;padding:2px 5px;border-radius:3px}</style>
+</head><body>
+<div class="nav"><div><b>LAMU REFINERY</b> - Docs System | SKYNET-CYBER SHIANDA</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
+<div class="header"><h2>📄 DOCUMENT TRACKING SYSTEM</h2><p>Built by <b>Muhsin</b> - Offline Ready for Mokowe | ID, KRA, NSSF, SHIF, Good Conduct, Certs</p><p id="today"></p></div>
+<div class="container">
+<div class="card">
+<h3>Add / Update Worker Docs</h3>
+<label>Worker National ID No</label>
+<input id="natID" placeholder="e.g. 30000001">
+<label>Worker Full Name</label>
+<input id="wName" placeholder="e.g. Omar Ali">
+<label>Document Type</label>
+<select id="docType"><option>National ID</option><option>KRA PIN</option><option>NSSF Card</option><option>SHIF/SHIA</option><option>Good Conduct</option><option>Trade Test Certificate</option><option>Safety Passport</option><option>Driving License</option></select>
+<label>Document Number</label>
+<input id="docNo" placeholder="e.g. KRA PIN A123...">
+<label>Expiry Date (If applicable)</label>
+<input id="docExp" type="date">
+<label>Status</label>
+<select id="docStatus"><option>Valid / Submitted</option><option>Missing</option><option>Expired</option><option>Pending Renewal</option></select>
+<button onclick="addDoc()">+ SAVE DOCUMENT</button>
+<hr style="margin:10px 0">
+<label>Filter by Status</label>
+<select id="filter" onchange="render()"><option value="all">Show All</option><option value="Missing">Missing Docs Only</option><option value="Expired">Expired Only</option><option value="Expiring">Expiring in 30 Days</option></select>
+<button style="background:green;margin-top:8px" onclick="exportCSV()">📥 EXPORT EXCEL FOR HR</button>
+</div>
+<div class="card">
+<h3>All Workers Documents - Compliance Check</h3>
+<p style="font-size:11px;color:#666">Green=Valid, Yellow=Expiring soon, Red=Expired, Grey=Missing - HR must act!</p>
+<div style="overflow-x:auto">
+<table><thead><tr><th>ID No</th><th>Name</th><th>Doc Type</th><th>Doc Number</th><th>Expiry Date</th><th>Status</th><th>Days Left</th><th>Action</th></tr></thead><tbody id="docTable"></tbody></table>
+</div>
+<h3 style="margin-top:15px">Compliance Summary</h3>
+<div id="summary" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+</div>
+</div>
+<script>
+let docs=JSON.parse(localStorage.getItem('lamu_docs')||'[]');
+function save(){localStorage.setItem('lamu_docs',JSON.stringify(docs));render();}
+function addDoc(){
+ let nid=document.getElementById('natID').value.trim(), name=document.getElementById('wName').value.trim(), type=document.getElementById('docType').value, no=document.getElementById('docNo').value.trim(), exp=document.getElementById('docExp').value, stat=document.getElementById('docStatus').value;
+ if(!nid||!name){alert('Enter ID and Name');return;}
+ let exist=docs.find(d=>d.nid==nid && d.type==type);
+ if(exist){exist.no=no;exist.exp=exp;exist.stat=stat;save();}else{docs.push({nid:nid,wName:name,type:type,no:no,exp:exp,stat:stat});save();}
+ document.getElementById('docNo').value='';document.getElementById('docExp').value='';
+}
+function render(){
+ let tb=document.getElementById('docTable'); tb.innerHTML=''; let f=document.getElementById('filter').value;
+ let filtered=docs.filter(d=>{
+  if(f=='all')return true;
+  if(f=='Missing')return d.stat=='Missing';
+  if(f=='Expired'){if(!d.exp)return false;let diff=Math.ceil((new Date(d.exp)-new Date().setHours(0,0,0,0))/86400000);return diff<0||d.stat=='Expired';}
+  if(f=='Expiring'){if(!d.exp)return false;let diff=Math.ceil((new Date(d.exp)-new Date().setHours(0,0,0,0))/86400000);return diff>=0&&diff<=30;}
+  return true;
+ });
+ filtered.forEach(d=>{
+  let expDate=d.exp?new Date(d.exp):null; let today=new Date(); today.setHours(0,0,0,0);
+  let diff=expDate?Math.ceil((expDate-today)/86400000):null;
+  let statusBadge='', daysLeft='-';
+  if(d.stat=='Missing'){statusBadge='<span class="miss">MISSING</span>';daysLeft='<span class="miss">Need Doc</span>';}
+  else if(diff!==null&&diff<0){statusBadge='<span class="exp">EXPIRED</span>';daysLeft='<span class="exp">'+Math.abs(diff)+' days ago</span>';}
+  else if(diff!==null&&diff<=30){statusBadge='<span class="warn">Expiring</span>';daysLeft='<span class="warn">'+diff+' days left</span>';}
+  else if(d.stat=='Valid / Submitted'){statusBadge='<span class="ok">Valid</span>';daysLeft=diff!==null?'<span class="ok">'+diff+' days</span>':'<span class="ok">OK</span>';}
+  else{statusBadge='<span class="miss">'+d.stat+'</span>';daysLeft=diff!==null?diff+'d':'-';}
+  tb.innerHTML+=`<tr><td><b>${d.nid}</b></td><td>${d.wName}</td><td>${d.type}</td><td>${d.no||'-'}</td><td>${d.exp||'No Expiry'}</td><td>${statusBadge}</td><td>${daysLeft}</td><td><button onclick="delDoc('${d.nid}','${d.type}')" style="background:red;padding:2px 5px;font-size:10px">Del</button></td></tr>`;
+ });
+ let total=docs.length, missing=docs.filter(d=>d.stat=='Missing').length, expired=docs.filter(d=>{if(!d.exp)return false;return Math.ceil((new Date(d.exp)-new Date().setHours(0,0,0,0))/86400000)<0}).length, expiring=docs.filter(d=>{if(!d.exp)return false;let diff=Math.ceil((new Date(d.exp)-new Date().setHours(0,0,0,0))/86400000);return diff>=0&&diff<=30}).length;
+ document.getElementById('summary').innerHTML=`<div style="background:#fff;padding:8px 12px;border-radius:6px;border:1px solid #ddd">Total Docs: <b>${total}</b></div><div style="background:#fee2e2;padding:8px 12px;border-radius:6px">Expired: <b>${expired}</b></div><div style="background:#fef9c3;padding:8px 12px;border-radius:6px">Expiring: <b>${expiring}</b></div><div style="background:#e5e7eb;padding:8px 12px;border-radius:6px">Missing: <b>${missing}</b></div>`;
+}
+function delDoc(nid,type){if(confirm('Delete?')){docs=docs.filter(d=>!(d.nid==nid&&d.type==type));save();}}
+function exportCSV(){let csv='ID,Name,DocType,DocNumber,Expiry,Status\n';docs.forEach(d=>{csv+=`${d.nid},${d.wName},${d.type},${d.no},${d.exp},${d.stat}\n`;});let blob=new Blob([csv],{type:'text/csv'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Lamu_Docs_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+document.getElementById('today').innerText='Today: '+new Date().toDateString(); render();
+</script>
+</body></html>
