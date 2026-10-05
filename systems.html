@@ -1,84 +1,34 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Systems - Lamu Refinery ERP | SKYNET-CYBER SHIANDA</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f3f4f6}
-.nav{background:#0D4F8B;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
-.nav b{font-size:18px}.nav b span{color:#FFC000}
-.nav a{color:#FFC000;text-decoration:none;font-weight:bold;margin-left:15px}
-.header{background:#111827;color:#fff;padding:25px;text-align:center}
-.header h1{color:#FFC000;font-size:28px}
-.header p{margin-top:5px;color:#d1d5db}
-.container{padding:20px;max-width:1200px;margin:0 auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}
-.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.1);border-top:5px solid #0D4F8B;transition:.2s}
-.card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.15)}
-.card h3{color:#0D4F8B;margin-bottom:8px}
-.card p{font-size:13px;color:#555;margin-bottom:12px;line-height:1.4}
-.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:bold;margin-bottom:10px}
-.live{background:#dcfce7;color:#166534;border:1px solid #86efac}
-.btn{display:block;text-align:center;background:#0D4F8B;color:#fff;padding:10px;border-radius:6px;text-decoration:none;font-weight:bold;margin-top:10px}
-.btn:hover{background:#0a3d6e}
-.footer{text-align:center;padding:20px;color:#666;font-size:12px;margin-top:30px}
-</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Systems - ERP DASHBOARD</title><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.top{background:#111827;color:#fff;padding:15px;text-align:center}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px}@media(max-width:900px){.grid{grid-template-columns:1fr}}.card{background:#fff;padding:15px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);border-top:5px solid #0D4F8B}.card b{font-size:28px;display:block;color:#0D4F8B}.btn{display:block;background:#0D4F8B;color:#fff;text-align:center;padding:10px;border-radius:6px;text-decoration:none;margin-top:10px;font-weight:bold}</style>
 </head><body>
-<div class="nav"><div><b>LAMU <span>REFINERY</span></b> | SKYNET-CYBER SHIANDA</div><div><a href="index.html">HOME</a><a href="systems.html">SYSTEMS</a></div></div>
-
-<div class="header">
-<h1>🏗️ LAMU REFINERY ERP SYSTEMS</h1>
-<p>Built by <b style="color:#FFC000">Muhsin Swaleh</b> - 5 Core Systems - 100% Offline Ready for Mokowe</p>
-<p id="today" style="margin-top:8px;color:#FFC000"></p>
-</div>
-
-<div class="container">
+<div class="top"><h2>Built by Muhsin Swaleh - 5 Core Systems - ERP INTEGRATED</h2><p id="today"></p><p id="erpStatus" style="color:#FFC000">Loading ERP counts...</p></div>
 <div class="grid">
-
-<div class="card">
-<span class="badge live">● LIVE</span>
-<h3>1. 👷 Attendance System</h3>
-<p>Daily worker check-in/out, ID verification, shift tracking for 2000+ workers at Mokowe site.</p>
-<a class="btn" href="attendance.html">OPEN ATTENDANCE →</a>
+<div class="card"><small>• LIVE</small><h3>1. Attendance System</h3><b id="c1">0</b> Workers in Attendance<p style="font-size:11px">Daily check-in/out - auto from Recruitment after verification</p><a class="btn" href="attendance.html">OPEN ATTENDANCE →</a></div>
+<div class="card"><small>• LIVE</small><h3>2. Store Inventory</h3><b id="c2">0</b> Items<p style="font-size:11px">Cement, steel, diesel tracking</p><a class="btn" href="store.html">OPEN STORE →</a></div>
+<div class="card"><small>• LIVE</small><h3>3. Fleet & Driver Log</h3><b id="c3">0</b> Drivers<p style="font-size:11px">Auto when Hired as Driver/Operator</p><a class="btn" href="fleet.html">OPEN FLEET →</a></div>
+<div class="card" style="border-top-color:#f59e0b"><small>• LIVE</small><h3>4. Document Tracking</h3><b id="c4">0</b> Pending / <span id="c4v">0</span> Verified<p style="font-size:11px">ID KRA NSSF SHIF Good Conduct - Verification unlocks Attendance</p><a class="btn" href="documents.html" style="background:#f59e0b">OPEN DOCUMENTS →</a></div>
+<div class="card" style="border-top-color:#16a34a"><small>• LIVE</small><h3>5. Recruitment Database</h3><b id="c5">0</b> Applicants<p style="font-size:11px">Click Hired → Auto to Documents + Attendance + Fleet</p><a class="btn" href="recruitment.html" style="background:#16a34a">OPEN RECRUITMENT →</a></div>
 </div>
-
-<div class="card">
-<span class="badge live">● LIVE</span>
-<h3>2. 📦 Store Inventory</h3>
-<p>Cement, steel, diesel stock tracking. Prevent theft. Low-stock alerts for LAPSSET supply chain.</p>
-<a class="btn" href="store.html">OPEN STORE →</a>
-</div>
-
-<div class="card">
-<span class="badge live">● LIVE</span>
-<h3>3. 🚛 Fleet & Driver Log</h3>
-<p>Truck plate, driver, Driving license Expiry Date, fuel control Mombasa-Mokowe route with KM/L check.</p>
-<a class="btn" href="fleet.html">OPEN FLEET →</a>
-</div>
-
-<div class="card">
-<span class="badge live">● LIVE</span>
-<h3>4. 📄 Document Tracking</h3>
-<p>ID, KRA, NSSF, SHIF, Good Conduct expiry tracking. Compliance summary for HR - Expiring alerts.</p>
-<a class="btn" href="documents.html">OPEN DOCUMENTS →</a>
-</div>
-
-<div class="card" style="border-top-color:#16a34a">
-<span class="badge live">● LIVE</span>
-<h3>5. 👷‍♂️ Recruitment Database</h3>
-<p>60,000+ Lamu County applicants. Searchable by ID, Phone, Skill, Village. Governor report export.</p>
-<a class="btn" style="background:#16a34a" href="recruitment.html">OPEN RECRUITMENT →</a>
-</div>
-
-</div>
-
-<div class="footer">
-<p><b>SKYNET-CYBER SHIANDA</b> | Built by Muhsin Swaleh | ID 28206984 | Mokowe, Lamu</p>
-<p>lamu-refinery-lamu.vercel.app | Offline-First | No Internet Needed at Site</p>
-<p style="margin-top:8px;color:#0D4F8B;font-weight:bold">5/5 SYSTEMS LIVE - 100% COMPLETE</p>
-</div>
-</div>
-
 <script>
-document.getElementById('today').innerText='Today: '+new Date().toDateString() + ' | 5/5 LIVE - ERP READY';
-</script>
-</body></html>
+const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ECV6XUpesPYbEccQpwSx6A_5oyQxJmV";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function loadCounts(){
+ try{
+  let {count:w}=await sb.from('lamu_workers').select('*',{count:'exact',head:true});
+  let {count:r}=await sb.from('lamu_recruitment').select('*',{count:'exact',head:true});
+  let {data:d}=await sb.from('lamu_documents').select('verified');
+  let {count:f}=await sb.from('lamu_fleet').select('*',{count:'exact',head:true});
+  document.getElementById('c1').innerText=w||0;
+  document.getElementById('c5').innerText=r||0;
+  document.getElementById('c4').innerText=d?d.filter(x=>!x.verified).length:0;
+  document.getElementById('c4v').innerText=d?d.filter(x=>x.verified).length:0;
+  document.getElementById('c3').innerText=f||0;
+  document.getElementById('c2').innerText='∞';
+  document.getElementById('erpStatus').innerText=`Today: ${new Date().toDateString()} | ERP INTEGRATED - Recruitment → Documents → Attendance/Fleet | 5/5 LIVE`;
+ }catch(e){document.getElementById('erpStatus').innerText=e.message}
+}
+document.getElementById('today').innerText=new Date().toDateString();
+loadCounts();
+</script></body></html>
