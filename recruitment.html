@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{font-family:Arial, sans-serif;margin:0;background:#eef2f7}
+body{font-family:Arial,sans-serif;margin:0;background:#eef2f7}
 .header{background:#1a237e;color:#fff;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
 .header a{color:#ffab40;text-decoration:none;font-weight:bold}
 .container{display:flex;gap:15px;padding:15px;flex-wrap:wrap}
@@ -26,75 +26,37 @@ td{padding:7px 6px;border-bottom:1px solid #ddd;font-size:13px}
 </style>
 </head>
 <body>
-<div class="header">
-<span>Recruitment - ERP Fixed ✅</span>
-<a href="systems.html">SYSTEMS</a>
-</div>
-
+<div class="header"><span>Recruitment - ERP Fixed ✅</span><a href="systems.html">SYSTEMS</a></div>
 <div class="container">
 <div class="left">
 <h3 style="margin:0 0 10px">Add Applicant</h3>
-<label>ID</label>
-<input id="rid" placeholder="e.g. 98765432">
-<label>Name</label>
-<input id="rname" placeholder="e.g. JEROM SAKWA">
-<label>Phone</label>
-<input id="rphone" placeholder="e.g. 0789900987">
-<label>Village</label>
+<input id="rid" placeholder="ID e.g. 98765432">
+<input id="rname" placeholder="Name e.g. JEROM SAKWA">
+<input id="rphone" placeholder="Phone e.g. 0789900987">
 <select id="rvillage"><option>Mokowe</option><option>Lamu</option><option>Hindi</option><option>Mpeketoni</option><option>Witu</option></select>
-<label>Skill</label>
 <select id="rskill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Steel Fixer</option><option>Welder</option><option>Plumber</option><option>Electrician</option><option>Driver</option><option>Operator</option><option>Foreman</option><option>Engineer</option></select>
-<label>Exp (Years)</label>
-<input id="rexp" type="number" placeholder="e.g. 7" value="2">
-<label>Status</label>
+<input id="rexp" type="number" placeholder="Exp Years" value="2">
 <select id="rstatus"><option>New Applicant</option><option>Shortlisted</option><option selected>Hired</option></select>
 <button class="save" onclick="saveApplicant()">+ SAVE TO CLOUD</button>
 <div id="msg"></div>
-<div style="margin-top:15px;font-size:11px;color:#666;background:#fff8e1;padding:8px;border-radius:5px">
-<b>ERP Flow:</b><br>
-Hired → Auto to Documents (with 1yr Good Conduct expiry) → Attendance → Fleet (if Driver/Operator) → Store
 </div>
-</div>
-
 <div class="right">
 <h3 style="margin:0">Applicants Database</h3>
 <div id="count" style="color:#1a237e;font-weight:bold;margin:8px 0">Loading...</div>
-<table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead>
-<tbody id="tbody"></tbody></table>
+<table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead><tbody id="tbody"></tbody></table>
 </div>
 </div>
-
 <script>
-// ====== PASTE YOUR REAL KEY HERE ======
-const SUPA_URL = 'https://xbxzbszpephjgnxjszjn.supabase.co';
-const SUPA_KEY = 'PASTE_YOUR_REAL_ANON_KEY_HERE'; // <-- Replace this with your anon key from Supabase Settings -> API
-// ======================================
-
-const client = supabase.createClient(SUPA_URL, SUPA_KEY);
-
+const SUPA_URL='https://dnjsdmvtwrvydmoalmzjc.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuanNkY210d3J2eWRtb2FsbXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNjMzNDAsImV4cCI6MjEwNTgzOTM0MH0.iFa1BU0SNyADDferrj7szN2lISgxLrfb6Qus1aVthLI';
+const client=supabase.createClient(SUPA_URL,SUPA_KEY);
 async function loadApplicants(){
- try{
-   let {data,error} = await client.from('lamu_recruitment').select('*').order('created_at',{ascending:false});
-   if(error) throw error;
-   document.getElementById('count').innerText = `Total Applicants: ${data.length}`;
-   let tb=document.getElementById('tbody'); tb.innerHTML='';
-   data.forEach(r=>{
-     let badge = r.status==='Hired'?'badge-hired':(r.status==='Shortlisted'?'badge-short':'badge-new');
-     tb.innerHTML+=`<tr>
-       <td>${r.id}</td>
-       <td style="font-weight:bold">${r.name}</td>
-       <td>${r.phone||''}</td>
-       <td>${r.village||''}</td>
-       <td>${r.skill||''}</td>
-       <td>${r.experience||0}yr</td>
-       <td><span class="badge ${badge}">${r.status}</span></td>
-     </tr>`;
-   });
- }catch(e){
-   document.getElementById('count').innerText = 'Error: '+e.message;
- }
+ let {data,error}=await client.from('lamu_recruitment').select('*').order('created_at',{ascending:false});
+ if(error){document.getElementById('count').innerText='Error: '+error.message; return;}
+ document.getElementById('count').innerText=`Total Applicants: ${data.length}`;
+ let tb=document.getElementById('tbody'); tb.innerHTML='';
+ data.forEach(r=>{let badge=r.status==='Hired'?'badge-hired':(r.status==='Shortlisted'?'badge-short':'badge-new'); tb.innerHTML+=`<tr><td>${r.id}</td><td style="font-weight:bold">${r.name}</td><td>${r.phone||''}</td><td>${r.village||''}</td><td>${r.skill||''}</td><td>${r.experience||0}yr</td><td><span class="badge ${badge}">${r.status}</span></td></tr>`;});
 }
-
 async function saveApplicant(){
  let id=document.getElementById('rid').value.trim();
  let name=document.getElementById('rname').value.trim().toUpperCase();
@@ -104,46 +66,23 @@ async function saveApplicant(){
  let exp=parseInt(document.getElementById('rexp').value)||0;
  let status=document.getElementById('rstatus').value;
  let msg=document.getElementById('msg');
-
- if(!id||!name){ msg.className='error'; msg.innerText='Enter ID and Name!'; return; }
+ if(!id||!name){msg.className='error'; msg.innerText='Enter ID and Name!'; return;}
  msg.className=''; msg.innerText='Saving...';
-
  try{
-   // 1. Save to recruitment - NO 'date' COLUMN - ONLY VALID COLUMNS
-   let {error:err1} = await client.from('lamu_recruitment').upsert([{id, name, phone, village, skill, experience: exp, status}], {onConflict:'id'});
+   let {error:err1}=await client.from('lamu_recruitment').upsert([{id,name,phone,village,skill,experience:exp,status}],{onConflict:'id'});
    if(err1) throw err1;
-
-   // 2. If Hired, auto-create ERP chain with 1 year Good Conduct expiry
    if(status==='Hired'){
-     let today = new Date().toISOString().split('T')[0];
-     let expiry = new Date(); expiry.setFullYear(expiry.getFullYear()+1);
-     let expiryStr = expiry.toISOString().split('T')[0];
-
-     await client.from('lamu_documents').upsert([{
-       id, name, phone, skill,
-       id_doc:true, kra:true, nssf:true, shif:true, good_conduct:true,
-       verified:true, status:'Verified',
-       good_conduct_issue: today,
-       good_conduct_expiry: expiryStr
-     }], {onConflict:'id'});
-
-     await client.from('lamu_workers').upsert([{id, name, phone, skill, rate:1500}], {onConflict:'id'});
-
-     if(skill==='Driver' || skill==='Operator'){
-       await client.from('lamu_fleet').upsert([{id, driver_name:name, skill, plate:'TBD', license_expiry:'2027-12-31'}], {onConflict:'id'});
-     }
+     let today=new Date().toISOString().split('T')[0];
+     let expiry=new Date(); expiry.setFullYear(expiry.getFullYear()+1);
+     let expiryStr=expiry.toISOString().split('T')[0];
+     await client.from('lamu_documents').upsert([{id,name,phone,skill,id_doc:true,kra:true,nssf:true,shif:true,good_conduct:true,verified:true,status:'Verified',good_conduct_issue:today,good_conduct_expiry:expiryStr}],{onConflict:'id'});
+     await client.from('lamu_workers').upsert([{id,name,phone,skill,rate:1500}],{onConflict:'id'});
+     if(skill==='Driver'||skill==='Operator'){await client.from('lamu_fleet').upsert([{id,driver_name:name,skill,plate:'TBD',license_expiry:'2027-12-31'}],{onConflict:'id'});}
    }
-
-   msg.className='success'; msg.innerText='✅ Saved! '+name+' - '+status;
-   loadApplicants();
-   // Clear form
+   msg.className='success'; msg.innerText='✅ Saved! '+name+' - '+status; loadApplicants();
    document.getElementById('rid').value=''; document.getElementById('rname').value=''; document.getElementById('rphone').value='';
- }catch(e){
-   msg.className='error'; msg.innerText='Save failed: '+e.message;
-   console.log(e);
- }
+ }catch(e){msg.className='error'; msg.innerText='Save failed: '+e.message;}
 }
-
 loadApplicants();
 </script>
 </body>
