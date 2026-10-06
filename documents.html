@@ -1,59 +1,25 @@
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documents - Lamu Refinery ERP</title>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documents - Lamu Refinery</title>
 <style>
-*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#eef2f7}
-.header{background:#1a237e;color:#fff;padding:14px 18px;display:flex;justify-content:space-between}
-.header a{color:#ffab40;text-decoration:none;font-weight:bold;background:#fff2;padding:6px 12px;border-radius:6px}
-.container{padding:15px}
-.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.stats{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}.stat{flex:1;min-width:140px;padding:12px;border-radius:10px;text-align:center}.stat b{font-size:22px;display:block}
-.green{background:#e8f5e9}.yellow{background:#fffde7}.red{background:#ffebee}.blue{background:#e8eaf6}
-table{width:100%;border-collapse:collapse;margin-top:12px}th{background:#1a237e;color:#fff;padding:10px 8px;font-size:12px;text-align:left}td{padding:9px 8px;border-bottom:1px solid #ddd;font-size:12px}
-.exp-ok{color:#2e7d32;font-weight:bold}.exp-warn{background:#fff176;padding:3px 7px;border-radius:10px;font-weight:bold}.exp-danger{background:#ef5350;color:#fff;padding:3px 7px;border-radius:10px;font-weight:bold}
-input{padding:10px;border:1.5px solid #c5cae9;border-radius:8px;width:280px}
-</style></head>
-<body>
-<div class="header"><div><b>LAMU REFINERY ERP</b> - Document Tracking <span style="background:#4caf50;padding:3px 8px;border-radius:10px;font-size:11px;margin-left:8px">DEMO READY ✅</span></div><a href="systems.html">◀ SYSTEMS</a></div>
-<div class="container"><div class="card">
-<h3 style="margin:0">Good Conduct & Compliance Tracking - HR Alerts</h3>
-<div class="stats">
-<div class="stat blue"><b id="cTotal">0</b>Total Workers</div>
-<div class="stat green"><b id="cValid">0</b>Valid</div>
-<div class="stat yellow"><b id="cExpSoon">0</b>Expiring <30 days</div>
-<div class="stat red"><b id="cExp">0</b>Expired</div>
-</div>
-<input id="search" placeholder="Search ID or Name..." onkeyup="load()">
-<div style="overflow:auto;max-height:70vh">
-<table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Issue Date</th><th>Expiry Date</th><th>Days Left</th><th>Status</th><th>Docs</th></tr></thead><tbody id="tbody"></tbody></table>
-</div>
-</div></div>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#0a194e}
+.header{background:linear-gradient(90deg,#0a194e,#0f2c8a);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;border-bottom:3px solid #ffb81c}
+.header b{color:#ffb81c}.header a{color:#0a194e;background:#ffb81c;text-decoration:none;font-weight:bold;padding:7px 16px;border-radius:20px}
+.container{padding:16px}.card{background:#fff;padding:20px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);border-top:4px solid #ffb81c}
+.stats{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.stat{flex:1;min-width:130px;padding:14px;border-radius:12px;text-align:center;color:#fff}.stat b{font-size:24px;display:block;color:#ffb81c}
+.green{background:linear-gradient(135deg,#0f2c8a,#1a42c0)}.yellow{background:linear-gradient(135deg,#7f6003,#b38600)}.red{background:linear-gradient(135deg,#8a0f0f,#c01a1a)}.blue{background:linear-gradient(135deg,#0a194e,#0f2c8a)}
+table{width:100%;border-collapse:collapse;margin-top:12px}th{background:#0f2c8a;color:#ffb81c;padding:11px 8px;font-size:12px;text-align:left}td{padding:10px 8px;border-bottom:1px solid #e8eaf6;font-size:12px}
+.exp-ok{color:#0f2c8a;font-weight:bold}.exp-warn{background:#ffb81c;color:#0a194e;padding:4px 9px;border-radius:20px;font-weight:bold}.exp-danger{background:#ef5350;color:#fff;padding:4px 9px;border-radius:20px;font-weight:bold}
+input{padding:12px;border:1.8px solid #0f2c8a33;border-radius:10px;width:300px;background:#f6f8ff}
+h3{color:#0f2c8a;margin:0}
+</style></head><body>
+<div class="header"><div><b>DANGOTE LAMU REFINERY</b> - Document Tracking <span style="background:#ffb81c;color:#0a194e;padding:4px 10px;border-radius:20px;font-size:11px;margin-left:10px">HR ALERTS LIVE ✅</span></div><a href="systems.html">◀ SYSTEMS</a></div>
+<div class="container"><div class="card"><h3>📄 Good Conduct Expiry Tracking - Auto Alerts</h3>
+<div class="stats"><div class="stat blue"><b id="cTotal">0</b>Total</div><div class="stat green"><b id="cValid">0</b>Valid</div><div class="stat yellow"><b id="cExpSoon">0</b>Expiring <30d</div><div class="stat red"><b id="cExp">0</b>Expired</div></div>
+<input id="search" placeholder="🔍 Search ID or Name..." onkeyup="load()">
+<div style="overflow:auto;max-height:70vh"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Issue</th><th>Expiry</th><th>Days Left</th><th>Status</th><th>Docs</th></tr></thead><tbody id="tbody"></tbody></table></div></div></div>
 <script>
-let KEY_REC='lamu_recruitment_demo'; let KEY_DOC='lamu_documents_demo';
-let docs=JSON.parse(localStorage.getItem(KEY_DOC)||'[]');
-if(docs.length==0){
- let rec=JSON.parse(localStorage.getItem(KEY_REC)||'[]');
- // create demo docs from recruitment or default
- let today=new Date(); let demo=[
-  {id:'54321234',name:'MORRIS KWENA',skill:'Casual Labour',issue:addDays(today,-340),expiry:addDays(today,25)},
-  {id:'28286984',name:'MUHSIN ORONJE',skill:'Engineer',issue:addDays(today,-200),expiry:addDays(today,165)},
-  {id:'10004032',name:'SOPHIA MANYASA',skill:'Operator',issue:addDays(today,-400),expiry:addDays(today,-35)},
-  {id:'25253647',name:'MUSA ATITWA',skill:'Driver',issue:addDays(today,-100),expiry:addDays(today,265)},
-  {id:'98765432',name:'JEROM SAKWA',skill:'Mason',issue:addDays(today,-10),expiry:addDays(today,355)},
- ];
- docs=demo; localStorage.setItem(KEY_DOC,JSON.stringify(docs));
-}
-function addDays(d,n){let x=new Date(d); x.setDate(x.getDate()+n); return x.toISOString().split('T')[0];}
-function daysLeft(exp){let e=new Date(exp), t=new Date(); return Math.ceil((e-t)/(1000*60*60*24));}
-function load(){
- let q=(document.getElementById('search').value||'').toUpperCase();
- let tb=document.getElementById('tbody'); tb.innerHTML=''; let cV=0,cS=0,cE=0;
- docs.filter(r=>!q||r.id.includes(q)||r.name.includes(q)).forEach(r=>{
-  let dl=daysLeft(r.expiry); let cls='exp-ok', txt=dl+' days', status='Valid';
-  if(dl<0){cls='exp-danger'; txt=dl+' EXPIRED'; status='EXPIRED'; cE++;} else if(dl<=30){cls='exp-warn'; txt=dl+' SOON'; status='Expiring Soon'; cS++;} else cV++;
-  tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.skill}</td><td>${r.issue}</td><td>${r.expiry}</td><td><span class="${cls}">${txt}</span></td><td>${status}</td><td>ID✓ KRA✓ NSSF✓ SHIF✓ Good Conduct✓</td></tr>`;
- });
- document.getElementById('cTotal').innerText=docs.length; document.getElementById('cValid').innerText=cV; document.getElementById('cExpSoon').innerText=cS; document.getElementById('cExp').innerText=cE;
-}
-load();
+let KEY='lamu_documents_demo'; let docs=JSON.parse(localStorage.getItem(KEY)||'[]');
+function addDays(d,n){let x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().split('T')[0];}
+if(docs.length==0){let t=new Date(); docs=[{id:'54321234',name:'MORRIS KWENA',skill:'Casual Labour',issue:addDays(t,-340),expiry:addDays(t,25)},{id:'28286984',name:'MUHSIN ORONJE',skill:'Engineer',issue:addDays(t,-200),expiry:addDays(t,165)},{id:'10004032',name:'SOPHIA MANYASA',skill:'Operator',issue:addDays(t,-400),expiry:addDays(t,-35)},{id:'25253647',name:'MUSA ATITWA',skill:'Driver',issue:addDays(t,-100),expiry:addDays(t,265)},{id:'98765432',name:'JEROM SAKWA',skill:'Mason',issue:addDays(t,-10),expiry:addDays(t,355)}]; localStorage.setItem(KEY,JSON.stringify(docs));}
+function daysLeft(e){return Math.ceil((new Date(e)-new Date())/86400000);}
+function load(){let q=(document.getElementById('search').value||'').toUpperCase(),tb=document.getElementById('tbody');tb.innerHTML='';let v=0,s=0,e=0;docs.filter(r=>!q||r.id.includes(q)||r.name.includes(q)).forEach(r=>{let dl=daysLeft(r.expiry),cls='exp-ok',txt=dl+' days',st='Valid';if(dl<0){cls='exp-danger';txt=dl+' EXPIRED';st='EXPIRED';e++;}else if(dl<=30){cls='exp-warn';txt=dl+' SOON';st='Expiring';s++;}else v++;tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.skill}</td><td>${r.issue}</td><td>${r.expiry}</td><td><span class="${cls}">${txt}</span></td><td>${st}</td><td>ID✓ KRA✓ NSSF✓ SHIF✓ GC✓</td></tr>`;});document.getElementById('cTotal').innerText=docs.length;document.getElementById('cValid').innerText=v;document.getElementById('cExpSoon').innerText=s;document.getElementById('cExp').innerText=e;}load();
 </script></body></html>
