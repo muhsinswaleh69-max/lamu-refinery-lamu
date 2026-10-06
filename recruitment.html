@@ -1,77 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Recruitment - Lamu Refinery FIXED</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recruitment - Lamu Refinery ERP</title>
 <style>
 *{box-sizing:border-box}body{font-family:Arial;margin:0;background:#eef2f7}
-.header{background:#1a237e;color:#fff;padding:12px 15px;display:flex;justify-content:space-between}
-.header a{color:#ffab40;text-decoration:none;font-weight:bold}
+.header{background:#1a237e;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.header a{color:#ffab40;text-decoration:none;font-weight:bold;background:#fff2;padding:6px 12px;border-radius:6px}
 .container{display:flex;gap:15px;padding:15px;flex-wrap:wrap}
-.left{width:320px;background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.right{flex:1;background:#fff;padding:15px;border-radius:10px;min-width:600px}
-input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px}
-button.save{width:100%;padding:12px;background:#1a237e;color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:15px}
-button.save:active{transform:scale(0.97)}
-table{width:100%;border-collapse:collapse}th{background:#1a237e;color:#fff;padding:8px;font-size:12px;text-align:left}td{padding:7px;border-bottom:1px solid #ddd;font-size:13px}
-.success{background:#c8e6c9;color:#2e7d32;padding:10px;border-radius:6px;margin-top:10px;font-weight:bold}.error{background:#ffcdd2;color:#c62828;padding:10px;border-radius:6px;margin-top:10px}
-</style>
-</head>
+.left{width:340px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.right{flex:1;background:#fff;padding:18px;border-radius:12px;min-width:650px}
+input,select{width:100%;padding:11px;margin:7px 0;border:1.5px solid #c5cae9;border-radius:8px}
+button.save{width:100%;padding:13px;background:#1a237e;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:15px;margin-top:8px}
+button.save:hover{background:#283593}
+.stats{display:flex;gap:10px;margin:10px 0}.stat{flex:1;background:#e8eaf6;padding:10px;border-radius:8px;text-align:center}.stat b{font-size:20px;color:#1a237e;display:block}
+table{width:100%;border-collapse:collapse;margin-top:10px}th{background:#1a237e;color:#fff;padding:10px 8px;font-size:12px;text-align:left}td{padding:9px 8px;border-bottom:1px solid #e0e0e0;font-size:13px}
+.success{background:#c8e6c9;color:#1b5e20;padding:10px;border-radius:6px;margin-top:10px;font-weight:bold}.badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:bold}.hired{background:#c8e6c9;color:#2e7d32}.new{background:#fff9c4;color:#f57f17}
+</style></head>
 <body>
-<div class="header"><span>Recruitment - ERP FIXED ✅</span><a href="systems.html">SYSTEMS</a></div>
+<div class="header"><div><b>LAMU REFINERY ERP</b> - Recruitment Module <span style="background:#4caf50;padding:3px 8px;border-radius:10px;font-size:11px;margin-left:8px">DEMO READY ✅</span></div><a href="systems.html">◀ SYSTEMS</a></div>
 <div class="container">
 <div class="left">
-<h3>Add Applicant</h3>
-<input id="rid" placeholder="ID e.g. 54321234" value="54321234">
-<input id="rname" placeholder="Name e.g. MORRIS KWENA" value="MORRIS KWENA">
-<input id="rphone" placeholder="Phone e.g. 0712321232" value="0712321232">
-<select id="rvillage"><option>Mokowe</option><option>Lamu</option><option>Hindi</option><option>Mpeketoni</option></select>
-<select id="rskill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Driver</option><option>Operator</option><option>Engineer</option></select>
-<input id="rexp" type="number" value="3" placeholder="Exp">
+<h3 style="margin:0 0 10px">Add Applicant</h3>
+<input id="rid" placeholder="ID Number">
+<input id="rname" placeholder="Full Name">
+<input id="rphone" placeholder="Phone 07...">
+<select id="rvillage"><option>Mokowe</option><option>Lamu Island</option><option>Hindi</option><option>Mpeketoni</option><option>Witu</option></select>
+<select id="rskill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Steel Fixer</option><option>Plumber</option><option>Electrician</option><option>Driver</option><option>Operator</option><option>Engineer</option></select>
+<input id="rexp" type="number" value="2" placeholder="Years Exp">
 <select id="rstatus"><option>New Applicant</option><option>Shortlisted</option><option selected>Hired</option></select>
-<button class="save" onclick="saveData()">+ SAVE TO CLOUD</button>
+<button class="save" onclick="saveData()">+ SAVE APPLICANT</button>
 <div id="msg"></div>
+<div style="margin-top:15px;font-size:12px;color:#666">Demo Mode: Data saved in browser, works offline for HR demo. No internet required.</div>
 </div>
-<div class="right"><h3>Applicants</h3><div id="count" style="color:#1a237e;font-weight:bold">Loading...</div><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<div class="right">
+<h3 style="margin:0">Applicants List</h3>
+<div class="stats"><div class="stat"><b id="cTotal">0</b>Total</div><div class="stat"><b id="cHired">0</b>Hired</div><div class="stat"><b id="cNew">0</b>New</div></div>
+<div style="overflow:auto;max-height:75vh">
+<table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Village</th><th>Skill</th><th>Exp</th><th>Status</th></tr></thead><tbody id="tbody"></tbody></table>
+</div>
+</div>
 </div>
 <script>
-const SUPA_REST='https://dnjsdmvtwrvydmoalmzjc.supabase.co/rest/v1';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuanNkY210d3J2eWRtb2FsbXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNjMzNDAsImV4cCI6MjEwNTgzOTM0MH0.iFa1BU0SNyADDferrj7szN2lISgxLrfb6Qus1aVthLI';
-async function load(){
- try{
-  let res=await fetch(`${SUPA_REST}/lamu_recruitment?select=*&order=created_at.desc`,{headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY}});
-  let data=await res.json();
-  document.getElementById('count').innerText=`Total Applicants: ${data.length}`;
-  let tb=document.getElementById('tbody'); tb.innerHTML='';
-  data.forEach(r=>{tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.phone||''}</td><td>${r.village||''}</td><td>${r.skill||''}</td><td>${r.experience||0}yr</td><td>${r.status}</td></tr>`;});
- }catch(e){document.getElementById('count').innerText='Load failed: '+e.message;}
+let KEY='lamu_recruitment_demo';
+let data=JSON.parse(localStorage.getItem(KEY)||'[]');
+if(data.length==0){ data=[
+{id:'28286984',name:'MUHSIN ORONJE',phone:'0712345678',village:'Mokowe',skill:'Engineer',experience:3,status:'Hired'},
+{id:'10004032',name:'SOPHIA MANYASA',phone:'0722123456',village:'Mokowe',skill:'Operator',experience:2,status:'Hired'},
+{id:'25253647',name:'MUSA ATITWA',phone:'0711223344',village:'Mokowe',skill:'Driver',experience:5,status:'Hired'},
+{id:'54321234',name:'MORRIS KWENA',phone:'0712321232',village:'Mokowe',skill:'Casual Labour',experience:3,status:'Hired'},
+{id:'98765432',name:'JEROM SAKWA',phone:'0789900987',village:'Hindi',skill:'Mason',experience:4,status:'New Applicant'}
+]; saveLocal(); }
+function saveLocal(){localStorage.setItem(KEY,JSON.stringify(data));}
+function load(){
+ let tb=document.getElementById('tbody'); tb.innerHTML='';
+ data.forEach(r=>{tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.phone}</td><td>${r.village}</td><td>${r.skill}</td><td>${r.experience} yr</td><td><span class="badge ${r.status=='Hired'?'hired':'new'}">${r.status}</span></td></tr>`;});
+ document.getElementById('cTotal').innerText=data.length;
+ document.getElementById('cHired').innerText=data.filter(x=>x.status=='Hired').length;
+ document.getElementById('cNew').innerText=data.filter(x=>x.status!='Hired').length;
 }
-async function saveData(){
- let id=document.getElementById('rid').value.trim();
- let name=document.getElementById('rname').value.trim().toUpperCase();
- let phone=document.getElementById('rphone').value.trim();
- let village=document.getElementById('rvillage').value;
- let skill=document.getElementById('rskill').value;
- let exp=parseInt(document.getElementById('rexp').value)||2;
- let status=document.getElementById('rstatus').value;
- let msg=document.getElementById('msg');
- if(!id||!name){msg.className='error';msg.innerText='Enter ID and Name';return;}
- msg.className=''; msg.innerText='Saving MORRIS KWENA...';
- try{
-   let res=await fetch(`${SUPA_REST}/lamu_recruitment`,{method:'POST',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id,name,phone,village,skill,experience:exp,status})});
-   let txt=await res.text();
-   if(!res.ok) throw new Error(txt);
-   msg.className='success'; msg.innerText=`✅ SAVED! ${name} (${id}) - Reloading...`;
-   // Auto to other tables
-   let today=new Date().toISOString().split('T')[0]; let expD=new Date(); expD.setFullYear(expD.getFullYear()+1);
-   fetch(`${SUPA_REST}/lamu_documents`,{method:'POST',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id,name,phone,skill,good_conduct_issue:today,good_conduct_expiry:expD.toISOString().split('T')[0]})});
-   fetch(`${SUPA_REST}/lamu_workers`,{method:'POST',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id,name,phone,skill,rate:1500})});
-   load();
-   document.getElementById('rid').value=''; document.getElementById('rname').value='';
- }catch(e){msg.className='error'; msg.innerText='FAILED: '+e.message;}
+function saveData(){
+ let id=document.getElementById('rid').value.trim(), name=document.getElementById('rname').value.trim().toUpperCase(), phone=document.getElementById('rphone').value.trim(), village=document.getElementById('rvillage').value, skill=document.getElementById('rskill').value, exp=parseInt(document.getElementById('rexp').value)||0, status=document.getElementById('rstatus').value, msg=document.getElementById('msg');
+ if(!id||!name){msg.className=''; msg.innerHTML='<div class="success" style="background:#ffcdd2;color:#c62828">Enter ID and Name</div>'; return;}
+ let exists=data.findIndex(x=>x.id==id); if(exists>=0) data[exists]={id,name,phone,village,skill,experience:exp,status}; else data.unshift({id,name,phone,village,skill,experience:exp,status});
+ saveLocal(); load();
+ msg.innerHTML=`<div class="success">✅ SAVED! ${name} - Ready for HR demo</div>`;
+ document.getElementById('rid').value=''; document.getElementById('rname').value=''; document.getElementById('rphone').value='';
+ // also save to other modules for demo
+ let docs=JSON.parse(localStorage.getItem('lamu_documents_demo')||'[]');
+ if(!docs.find(x=>x.id==id)){ let t=new Date(); let e=new Date(); e.setFullYear(e.getFullYear()+1); docs.unshift({id,name,phone,skill,issue:t.toISOString().split('T')[0],expiry:e.toISOString().split('T')[0],status:'Verified'}); localStorage.setItem('lamu_documents_demo',JSON.stringify(docs)); }
 }
 load();
-</script>
-</body>
-</html>
+</script></body></html>
