@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal - Dangote Lamu Refinery</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div id="login" class="min-h-screen flex items-center justify-center">
+<div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm">
+<h1 class="font-black text-[#0D2A5E] text-xl">ADMIN PORTAL</h1>
+<p class="text-xs mt-1 opacity-70">Dangote Lamu Refinery - Super Admin Only</p>
+<input id="user" placeholder="Username" class="w-full mt-6 border p-3 rounded-lg text-sm">
+<input id="pass" type="password" placeholder="Password" class="w-full mt-3 border p-3 rounded-lg text-sm">
+<button onclick="login()" class="w-full mt-4 bg-[#0D2A5E] text-white py-3 rounded-full font-black text-sm">Login</button>
+<p class="text-[10px] mt-3 text-center">Default: admin / Lamu2026!</p>
+<p id="err" class="text-red-600 text-xs mt-2 hidden">Wrong password!</p>
+</div>
+</div>
+
+<div id="dashboard" class="hidden">
+<nav class="bg-[#0D2A5E] text-white px-6 py-4 flex justify-between">
+<span class="font-black">ADMIN DASHBOARD - LAMU REFINERY</span>
+<button onclick="location.reload()" class="bg-white/20 px-4 py-1 rounded-full text-xs">Logout</button>
+</nav>
+<div class="max-w-7xl mx-auto p-6 grid md:grid-cols-4 gap-4">
+<div class="bg-white p-5 rounded-xl border-2 border-[#0D2A5E]"><div class="text-xs opacity-60">TOTAL STAFF</div><div class="text-2xl font-black" id="totalStaff">0</div><div class="text-[10px] mt-1">From LocalStorage</div></div>
+<div class="bg-white p-5 rounded-xl border-2 border-yellow-400"><div class="text-xs opacity-60">APPLICATIONS</div><div class="text-2xl font-black" id="totalApp">0</div><div class="text-[10px] mt-1">Via recruitment.html</div></div>
+<div class="bg-white p-5 rounded-xl"><div class="text-xs opacity-60">PAYROLL MONTH</div><div class="text-2xl font-black">KES 42M</div><div class="text-[10px] mt-1">60 Months Contracts</div></div>
+<div class="bg-white p-5 rounded-xl"><div class="text-xs opacity-60">ERP STATUS</div><div class="text-2xl font-black text-green-600">LIVE</div><div class="text-[10px] mt-1">Vercel + GitHub Linked</div></div>
+</div>
+
+<div class="max-w-7xl mx-auto p-6 grid md:grid-cols-2 gap-6">
+<div class="bg-white rounded-xl p-6">
+<h3 class="font-black text-sm">STAFF MANAGEMENT (Admin Only)</h3>
+<p class="text-xs mt-2 opacity-70">You can delete, edit salary, approve leave - Staff Portal cannot.</p>
+<div class="mt-4 space-y-2 text-xs" id="staffList">
+<!-- Staff from localStorage will show here -->
+</div>
+<button onclick="clearAll()" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-full text-xs">Clear All Staff (Admin Action)</button>
+</div>
+
+<div class="bg-white rounded-xl p-6">
+<h3 class="font-black text-sm">QUICK ADMIN ACTIONS</h3>
+<div class="mt-4 space-y-2">
+<a href="index.html" class="block border p-3 rounded-lg text-xs">→ View Staff Portal (index.html)</a>
+<a href="recruitment.html" class="block border p-3 rounded-lg text-xs">→ View Recruitment Form (public)</a>
+<a href="https://lamu-refinery-website.vercel.app" target="_blank" class="block bg-[#0D2A5E] text-white p-3 rounded-lg text-xs">→ Open Public Website</a>
+<div class="bg-yellow-50 border border-yellow-400 p-3 rounded-lg text-[11px] mt-3">
+<b>Integration:</b><br>
+Public Website Apply Button → recruitment.html<br>
+Staff Portal → index.html<br>
+Admin Portal → admin.html (YOU ARE HERE)
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+function login(){
+ const u=document.getElementById('user').value;
+ const p=document.getElementById('pass').value;
+ if(u==='admin' && p==='Lamu2026!'){
+   document.getElementById('login').classList.add('hidden');
+   document.getElementById('dashboard').classList.remove('hidden');
+   loadData();
+ }else{ document.getElementById('err').classList.remove('hidden'); }
+}
+function loadData(){
+ const staff=JSON.parse(localStorage.getItem('lamuStaff')||'[]');
+ const apps=JSON.parse(localStorage.getItem('lamuApplications')||'[]');
+ document.getElementById('totalStaff').innerText=staff.length;
+ document.getElementById('totalApp').innerText=apps.length;
+ const list=document.getElementById('staffList');
+ if(staff.length===0){ list.innerHTML='<div class="opacity-50">No staff yet. Add via Staff Portal.</div>'; return; }
+ list.innerHTML=staff.map((s,i)=>`<div class="flex justify-between border-b py-2"><span>${s.name||'Staff '+(i+1)} - ${s.id||''}</span><button onclick="del(${i})" class="text-red-600">Delete</button></div>`).join('');
+}
+function del(i){
+ let staff=JSON.parse(localStorage.getItem('lamuStaff')||'[]');
+ staff.splice(i,1);
+ localStorage.setItem('lamuStaff',JSON.stringify(staff));
+ loadData();
+}
+function clearAll(){ if(confirm('Delete ALL? Admin action!')){ localStorage.removeItem('lamuStaff'); loadData(); } }
+</script>
+</body>
+</html>
