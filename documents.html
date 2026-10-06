@@ -1,21 +1,59 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documents - Expiry Alerts</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{font-family:Arial;margin:0;background:#f1f5f9}.top{background:#1a237e;color:#fff;padding:10px;display:flex;justify-content:space-between}.card{background:#000;color:#fff;text-align:center;padding:10px}table{width:100%;border-collapse:collapse;background:#fff}th{background:#283593;color:#fff;padding:8px;font-size:11px}td{padding:6px;border:1px solid #ddd;font-size:12px;text-align:center}input[type=date]{width:125px}.ok{color:green;font-weight:bold}.warn{color:orange;font-weight:bold}.bad{color:red;font-weight:bold}.alert{margin:8px;padding:10px;border-radius:6px;font-size:13px}.alert-red{background:#ffebee;border-left:5px solid red}.alert-yellow{background:#fff8e1;border-left:5px solid orange}.btn{padding:5px 10px;border:none;border-radius:4px;color:#fff;cursor:pointer}.btn-o{background:#ef6c00}.btn-g{background:#2e7d32}</style>
-</head><body>
-<div class="top"><b>DOCUMENT TRACKING - HR EXPIRY ALERTS ✅</b><a href="systems.html" style="color:orange;text-decoration:none">SYSTEMS</a></div>
-<div class="card"><h3 style="margin:4px">📄 Verification → Attendance/Fleet/Store + HR Expiry</h3><div id="cnt" style="color:orange">Loading...</div><div id="alerts"></div></div>
-<table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>ID</th><th>KRA</th><th>NSSF</th><th>SHIF</th><th>GC</th><th>GC Issue</th><th>GC Expiry</th><th>Days Left</th><th>Status</th><th>Action</th></tr></thead><tbody id="tbody"></tbody></table>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documents - Lamu Refinery ERP</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#eef2f7}
+.header{background:#1a237e;color:#fff;padding:14px 18px;display:flex;justify-content:space-between}
+.header a{color:#ffab40;text-decoration:none;font-weight:bold;background:#fff2;padding:6px 12px;border-radius:6px}
+.container{padding:15px}
+.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.stats{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}.stat{flex:1;min-width:140px;padding:12px;border-radius:10px;text-align:center}.stat b{font-size:22px;display:block}
+.green{background:#e8f5e9}.yellow{background:#fffde7}.red{background:#ffebee}.blue{background:#e8eaf6}
+table{width:100%;border-collapse:collapse;margin-top:12px}th{background:#1a237e;color:#fff;padding:10px 8px;font-size:12px;text-align:left}td{padding:9px 8px;border-bottom:1px solid #ddd;font-size:12px}
+.exp-ok{color:#2e7d32;font-weight:bold}.exp-warn{background:#fff176;padding:3px 7px;border-radius:10px;font-weight:bold}.exp-danger{background:#ef5350;color:#fff;padding:3px 7px;border-radius:10px;font-weight:bold}
+input{padding:10px;border:1.5px solid #c5cae9;border-radius:8px;width:280px}
+</style></head>
+<body>
+<div class="header"><div><b>LAMU REFINERY ERP</b> - Document Tracking <span style="background:#4caf50;padding:3px 8px;border-radius:10px;font-size:11px;margin-left:8px">DEMO READY ✅</span></div><a href="systems.html">◀ SYSTEMS</a></div>
+<div class="container"><div class="card">
+<h3 style="margin:0">Good Conduct & Compliance Tracking - HR Alerts</h3>
+<div class="stats">
+<div class="stat blue"><b id="cTotal">0</b>Total Workers</div>
+<div class="stat green"><b id="cValid">0</b>Valid</div>
+<div class="stat yellow"><b id="cExpSoon">0</b>Expiring <30 days</div>
+<div class="stat red"><b id="cExp">0</b>Expired</div>
+</div>
+<input id="search" placeholder="Search ID or Name..." onkeyup="load()">
+<div style="overflow:auto;max-height:70vh">
+<table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Issue Date</th><th>Expiry Date</th><th>Days Left</th><th>Status</th><th>Docs</th></tr></thead><tbody id="tbody"></tbody></table>
+</div>
+</div></div>
 <script>
-const SUPA_URL='https://dnjsdmvtwrvydmoalmzjc.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuanNkY210d3J2eWRtb2FsbXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNjMzNDAsImV4cCI6MjEwNTgzOTM0MH0.iFa1BU0SNyADDferrj7szN2lISgxLrfb6Qus1aVthLI';
-const client=supabase.createClient(SUPA_URL,SUPA_KEY);
-let all=[];
-async function load(){let {data,error}=await client.from('lamu_documents').select('*').order('created_at',{ascending:false}); if(error){alert(error.message);return;} all=data||[]; document.getElementById('cnt').innerText=`✅ Documents: ${all.length} | Pending: ${all.filter(d=>!d.verified).length} | Verified: ${all.filter(d=>d.verified).length}`; showAlerts(); render();}
-function daysLeft(exp){if(!exp)return null; return Math.ceil((new Date(exp)-new Date())/86400000);}
-function showAlerts(){let html=''; let urgent=all.filter(d=>{let dl=daysLeft(d.good_conduct_expiry); return dl!==null&&dl<=30;}); let warning=all.filter(d=>{let dl=daysLeft(d.good_conduct_expiry); return dl>30&&dl<=90;}); if(urgent.length){html+=`<div class="alert alert-red">🚨 HR ALERT: ${urgent.length} Good Conduct EXPIRED or <30 days!<br>`; urgent.forEach(d=>{let dl=daysLeft(d.good_conduct_expiry); html+=`• ${d.name} (${d.id}) - ${d.good_conduct_expiry} - ${dl<0? 'EXPIRED '+Math.abs(dl)+' days ago!': dl+' days left!'}<br>`}); html+='</div>';} if(warning.length){html+=`<div class="alert alert-yellow">⚠️ Warning: ${warning.length} expiring in 90 days<br>`; warning.forEach(d=>html+=`• ${d.name} - ${d.good_conduct_expiry} (${daysLeft(d.good_conduct_expiry)} days left)<br>`); html+='</div>';} if(!html)html='<div style="color:#4caf50">✅ All Good Conduct Valid</div>'; document.getElementById('alerts').innerHTML=html;}
-function render(){let tb=document.getElementById('tbody'); tb.innerHTML=''; all.forEach(r=>{let dl=daysLeft(r.good_conduct_expiry); let txt='-'; let cls='ok'; if(dl!==null){if(dl<0){txt=`EXPIRED ${Math.abs(dl)}d`;cls='bad';}else if(dl<=30){txt=`${dl}d - URGENT`;cls='bad';}else if(dl<=90){txt=`${dl}d`;cls='warn';}else txt=`${dl}d`;} tb.innerHTML+=`<tr><td>${r.id}</td><td style="text-align:left">${r.name}</td><td>${r.skill}</td><td><input type="checkbox" ${r.id_doc?'checked':''} onchange="save('${r.id}','id_doc',this.checked)"></td><td><input type="checkbox" ${r.kra?'checked':''} onchange="save('${r.id}','kra',this.checked)"></td><td><input type="checkbox" ${r.nssf?'checked':''} onchange="save('${r.id}','nssf',this.checked)"></td><td><input type="checkbox" ${r.shif?'checked':''} onchange="save('${r.id}','shif',this.checked)"></td><td><input type="checkbox" ${r.good_conduct?'checked':''} onchange="save('${r.id}','good_conduct',this.checked)"></td><td><input type="date" value="${r.good_conduct_issue||''}" onchange="save('${r.id}','good_conduct_issue',this.value)"></td><td><input type="date" value="${r.good_conduct_expiry||''}" onchange="save('${r.id}','good_conduct_expiry',this.value)"></td><td class="${cls}">${txt}</td><td>${r.verified?'✅ Verified':'⏳ Pending'}</td><td><button class="btn ${r.verified?'btn-g':'btn-o'}" onclick="verify('${r.id}')">${r.verified?'Verified':'VERIFY'}</button></td></tr>`;});}
-async function save(id,field,val){let {error}=await client.from('lamu_documents').update({[field]:val}).eq('id',id); if(error)alert('Save FAILED: '+error.message); else {let rec=all.find(a=>a.id==id); rec[field]=val; showAlerts(); render();}}
-async function verify(id){let r=all.find(a=>a.id==id); if(!r.id_doc||!r.kra||!r.nssf||!r.shif||!r.good_conduct){alert('Tick all 5 docs first!');return;} if(!r.good_conduct_expiry){alert('Set Good Conduct Expiry Date first!');return;} let {error}=await client.from('lamu_documents').update({verified:true,status:'Verified'}).eq('id',id); if(error)alert(error.message); else load();}
+let KEY_REC='lamu_recruitment_demo'; let KEY_DOC='lamu_documents_demo';
+let docs=JSON.parse(localStorage.getItem(KEY_DOC)||'[]');
+if(docs.length==0){
+ let rec=JSON.parse(localStorage.getItem(KEY_REC)||'[]');
+ // create demo docs from recruitment or default
+ let today=new Date(); let demo=[
+  {id:'54321234',name:'MORRIS KWENA',skill:'Casual Labour',issue:addDays(today,-340),expiry:addDays(today,25)},
+  {id:'28286984',name:'MUHSIN ORONJE',skill:'Engineer',issue:addDays(today,-200),expiry:addDays(today,165)},
+  {id:'10004032',name:'SOPHIA MANYASA',skill:'Operator',issue:addDays(today,-400),expiry:addDays(today,-35)},
+  {id:'25253647',name:'MUSA ATITWA',skill:'Driver',issue:addDays(today,-100),expiry:addDays(today,265)},
+  {id:'98765432',name:'JEROM SAKWA',skill:'Mason',issue:addDays(today,-10),expiry:addDays(today,355)},
+ ];
+ docs=demo; localStorage.setItem(KEY_DOC,JSON.stringify(docs));
+}
+function addDays(d,n){let x=new Date(d); x.setDate(x.getDate()+n); return x.toISOString().split('T')[0];}
+function daysLeft(exp){let e=new Date(exp), t=new Date(); return Math.ceil((e-t)/(1000*60*60*24));}
+function load(){
+ let q=(document.getElementById('search').value||'').toUpperCase();
+ let tb=document.getElementById('tbody'); tb.innerHTML=''; let cV=0,cS=0,cE=0;
+ docs.filter(r=>!q||r.id.includes(q)||r.name.includes(q)).forEach(r=>{
+  let dl=daysLeft(r.expiry); let cls='exp-ok', txt=dl+' days', status='Valid';
+  if(dl<0){cls='exp-danger'; txt=dl+' EXPIRED'; status='EXPIRED'; cE++;} else if(dl<=30){cls='exp-warn'; txt=dl+' SOON'; status='Expiring Soon'; cS++;} else cV++;
+  tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.skill}</td><td>${r.issue}</td><td>${r.expiry}</td><td><span class="${cls}">${txt}</span></td><td>${status}</td><td>ID✓ KRA✓ NSSF✓ SHIF✓ Good Conduct✓</td></tr>`;
+ });
+ document.getElementById('cTotal').innerText=docs.length; document.getElementById('cValid').innerText=cV; document.getElementById('cExpSoon').innerText=cS; document.getElementById('cExp').innerText=cE;
+}
 load();
 </script></body></html>
