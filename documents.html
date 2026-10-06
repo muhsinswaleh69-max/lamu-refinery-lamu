@@ -1,25 +1,50 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documents - Lamu Refinery</title>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Docs Verification - Lamu</title>
 <style>
-*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#0a194e}
-.header{background:linear-gradient(90deg,#0a194e,#0f2c8a);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;border-bottom:3px solid #ffb81c}
-.header b{color:#ffb81c}.header a{color:#0a194e;background:#ffb81c;text-decoration:none;font-weight:bold;padding:7px 16px;border-radius:20px}
-.container{padding:16px}.card{background:#fff;padding:20px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);border-top:4px solid #ffb81c}
-.stats{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.stat{flex:1;min-width:130px;padding:14px;border-radius:12px;text-align:center;color:#fff}.stat b{font-size:24px;display:block;color:#ffb81c}
-.green{background:linear-gradient(135deg,#0f2c8a,#1a42c0)}.yellow{background:linear-gradient(135deg,#7f6003,#b38600)}.red{background:linear-gradient(135deg,#8a0f0f,#c01a1a)}.blue{background:linear-gradient(135deg,#0a194e,#0f2c8a)}
-table{width:100%;border-collapse:collapse;margin-top:12px}th{background:#0f2c8a;color:#ffb81c;padding:11px 8px;font-size:12px;text-align:left}td{padding:10px 8px;border-bottom:1px solid #e8eaf6;font-size:12px}
-.exp-ok{color:#0f2c8a;font-weight:bold}.exp-warn{background:#ffb81c;color:#0a194e;padding:4px 9px;border-radius:20px;font-weight:bold}.exp-danger{background:#ef5350;color:#fff;padding:4px 9px;border-radius:20px;font-weight:bold}
-input{padding:12px;border:1.8px solid #0f2c8a33;border-radius:10px;width:300px;background:#f6f8ff}
-h3{color:#0f2c8a;margin:0}
-</style></head><body>
-<div class="header"><div><b>DANGOTE LAMU REFINERY</b> - Document Tracking <span style="background:#ffb81c;color:#0a194e;padding:4px 10px;border-radius:20px;font-size:11px;margin-left:10px">HR ALERTS LIVE ✅</span></div><a href="systems.html">◀ SYSTEMS</a></div>
-<div class="container"><div class="card"><h3>📄 Good Conduct Expiry Tracking - Auto Alerts</h3>
-<div class="stats"><div class="stat blue"><b id="cTotal">0</b>Total</div><div class="stat green"><b id="cValid">0</b>Valid</div><div class="stat yellow"><b id="cExpSoon">0</b>Expiring <30d</div><div class="stat red"><b id="cExp">0</b>Expired</div></div>
-<input id="search" placeholder="🔍 Search ID or Name..." onkeyup="load()">
-<div style="overflow:auto;max-height:70vh"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Issue</th><th>Expiry</th><th>Days Left</th><th>Status</th><th>Docs</th></tr></thead><tbody id="tbody"></tbody></table></div></div></div>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f0f2f5}
+.topbar{background:#0f1020;color:#a0a0c0;font-size:12px;padding:6px 18px;display:flex;justify-content:space-between}
+.nav{background:#fff;padding:12px 18px;display:flex;justify-content:space-between}
+.nav b{color:#0f2c8a}.nav a{background:#0f2c8a;color:#fff;text-decoration:none;padding:7px 14px;border-radius:4px;font-size:12px;margin-left:6px;font-weight:bold}
+.hero{background:#0f2c8a;padding:14px}
+.card{background:#fff;padding:16px;border-radius:10px}
+table{width:100%;border-collapse:collapse}th{background:#0f2c8a;color:#ffb81c;padding:7px 4px;font-size:10px}td{padding:6px 4px;border-bottom:1px solid #ddd;font-size:11px;text-align:center}
+td:first-child,td:nth-child(2){text-align:left}
+input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#0f2c8a}
+.verified{background:#c8e6c9}.partial{background:#fff9c4}.missing{background:#ffcdd2}
+.btn{padding:6px 12px;background:#0f2c8a;color:#ffb81c;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+</style></head>
+<body>
+<div class="topbar"><div>📍 Mokowe, Lamu - LAPSSET | HR Document Verification</div><div style="color:#ff8c00">Built by Muhsin | SKYNET-CYBER SHIANDA</div></div>
+<div class="nav"><b>DANGOTE LAMU REFINERY - DOCUMENTS</b><div><a href="index.html">HOME</a><a href="recruitment.html">RECRUITMENT</a><a href="systems.html">SYSTEMS</a></div></div>
+<div class="hero"><div class="card">
+<h3 style="margin:0;color:#0f2c8a">📄 HR Document Verification - Tick to Verify</h3>
+<p style="font-size:11px;margin:4px 0">HR must tick each box: ID, KRA, NSSF, SHIF, Good Conduct. System shows verified status.</p>
+<div style="overflow:auto"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>ID</th><th>KRA PIN</th><th>NSSF</th><th>SHIF</th><th>Good Conduct</th><th>Verified %</th><th>Contract Left</th></tr></thead><tbody id="tbody"></tbody></table></div>
+</div></div>
 <script>
-let KEY='lamu_documents_demo'; let docs=JSON.parse(localStorage.getItem(KEY)||'[]');
-function addDays(d,n){let x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().split('T')[0];}
-if(docs.length==0){let t=new Date(); docs=[{id:'54321234',name:'MORRIS KWENA',skill:'Casual Labour',issue:addDays(t,-340),expiry:addDays(t,25)},{id:'28286984',name:'MUHSIN ORONJE',skill:'Engineer',issue:addDays(t,-200),expiry:addDays(t,165)},{id:'10004032',name:'SOPHIA MANYASA',skill:'Operator',issue:addDays(t,-400),expiry:addDays(t,-35)},{id:'25253647',name:'MUSA ATITWA',skill:'Driver',issue:addDays(t,-100),expiry:addDays(t,265)},{id:'98765432',name:'JEROM SAKWA',skill:'Mason',issue:addDays(t,-10),expiry:addDays(t,355)}]; localStorage.setItem(KEY,JSON.stringify(docs));}
+let KEY='lamu_documents_demo'; let KEY_REC='lamu_recruitment_demo';
+let docs=JSON.parse(localStorage.getItem(KEY)||'[]');
+let rec=JSON.parse(localStorage.getItem(KEY_REC)||'[]');
+if(docs.length==0){
+ rec.forEach(r=>{docs.push({id:r.id,name:r.name,skill:r.skill,ID:false,KRA:false,NSSF:false,SHIF:false,GC:false,cend:r.cend});});
+ localStorage.setItem(KEY,JSON.stringify(docs));
+}
 function daysLeft(e){return Math.ceil((new Date(e)-new Date())/86400000);}
-function load(){let q=(document.getElementById('search').value||'').toUpperCase(),tb=document.getElementById('tbody');tb.innerHTML='';let v=0,s=0,e=0;docs.filter(r=>!q||r.id.includes(q)||r.name.includes(q)).forEach(r=>{let dl=daysLeft(r.expiry),cls='exp-ok',txt=dl+' days',st='Valid';if(dl<0){cls='exp-danger';txt=dl+' EXPIRED';st='EXPIRED';e++;}else if(dl<=30){cls='exp-warn';txt=dl+' SOON';st='Expiring';s++;}else v++;tb.innerHTML+=`<tr><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.skill}</td><td>${r.issue}</td><td>${r.expiry}</td><td><span class="${cls}">${txt}</span></td><td>${st}</td><td>ID✓ KRA✓ NSSF✓ SHIF✓ GC✓</td></tr>`;});document.getElementById('cTotal').innerText=docs.length;document.getElementById('cValid').innerText=v;document.getElementById('cExpSoon').innerText=s;document.getElementById('cExp').innerText=e;}load();
+function load(){
+ let tb=document.getElementById('tbody'); tb.innerHTML='';
+ docs.forEach((r,idx)=>{
+  let count=[r.ID,r.KRA,r.NSSF,r.SHIF,r.GC].filter(Boolean).length; let perc=Math.round(count/5*100);
+  let cls=perc==100?'verified':perc>=60?'partial':'missing';
+  let dl=r.cend?daysLeft(r.cend):'No Contract';
+  tb.innerHTML+=`<tr class="${cls}"><td>${r.id}</td><td><b>${r.name}</b></td><td>${r.skill}</td>
+  <td><input type="checkbox" ${r.ID?'checked':''} onchange="toggle(${idx},'ID')"></td>
+  <td><input type="checkbox" ${r.KRA?'checked':''} onchange="toggle(${idx},'KRA')"></td>
+  <td><input type="checkbox" ${r.NSSF?'checked':''} onchange="toggle(${idx},'NSSF')"></td>
+  <td><input type="checkbox" ${r.SHIF?'checked':''} onchange="toggle(${idx},'SHIF')"></td>
+  <td><input type="checkbox" ${r.GC?'checked':''} onchange="toggle(${idx},'GC')"></td>
+  <td><b>${perc}%</b> ${perc==100?'✅':''}</td>
+  <td>${typeof dl=='number'?dl+' days':dl}</td></tr>`;
+ });
+}
+function toggle(i,field){docs[i][field]=!docs[i][field]; localStorage.setItem(KEY,JSON.stringify(docs)); load();}
+load();
 </script></body></html>
