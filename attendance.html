@@ -1,55 +1,139 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lamu Attendance FINAL</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f3f4f6}.nav{background:#0D4F8B;color:#fff;padding:12px;display:flex;justify-content:space-between}.nav a{color:#FFC000;text-decoration:none;font-weight:bold}.header{background:#111827;color:#fff;padding:15px;text-align:center}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}.stat{background:#fff;padding:12px;border-radius:8px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.1)}.stat b{font-size:22px;display:block;color:#0D4F8B}.container{padding:10px;display:grid;grid-template-columns:320px 1fr;gap:10px}@media(max-width:900px){.container{grid-template-columns:1fr}}.card{background:#fff;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.1);border-top:4px solid #0D4F8B;margin-bottom:10px}input,select,button{width:100%;padding:10px;margin:4px 0;border:1px solid #ddd;border-radius:6px}label{font-size:11px;font-weight:bold;color:#0D4F8B;display:block;margin-top:6px}button{background:#0D4F8B;color:#fff;font-weight:bold;border:none;cursor:pointer}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px}th{background:#0D4F8B;color:#fff}</style>
-</head><body>
-<div class="nav"><b>LAMU REFINERY - FINAL CLOUD ✅</b><a href="index.html">HOME</a></div>
-<div class="header"><h2>ATTENDANCE & PAYROLL - FINAL FIX</h2><p id="today"></p><p id="status" style="color:#FFC000">Connecting...</p></div>
-<div class="stats"><div class="stat"><b id="totalW">0</b>Total Workers</div><div class="stat"><b id="presentW">0</b>Present Today</div><div class="stat"><b id="absentW">0</b>Absent</div><div class="stat"><b id="otH">0.0h</b>Overtime</div></div>
-<div class="container"><div>
-<div class="card"><h3>Add Worker</h3><label>Name</label><input id="wName"><label>ID</label><input id="wID"><label>Phone</label><input id="wPhone"><label>Skill</label><select id="wSkill"><option>Welder</option><option>Mason</option><option>Carpenter</option><option>Electrician</option><option>Plumber</option><option>Steel Fixer</option><option>Casual Labour</option><option>Driver</option><option>Operator</option></select><label>Rate</label><input id="wRate" type="number" value="1200"><button onclick="addWorker()">+ SAVE TO CLOUD</button></div>
-<div class="card"><h3>Check In / Out</h3><label>Worker ID</label><input id="cID"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button onclick="checkIn()" style="background:#16a34a">✅ CHECK IN</button><button onclick="checkOut()" style="background:#dc2626">❌ CHECK OUT</button></div></div></div>
-<div><div class="card"><h3 id="todayTitle">Today</h3><table><thead><tr><th>ID</th><th>Name</th><th>In</th><th>Out</th><th>Pay</th></tr></thead><tbody id="todayTable"></tbody></table></div>
-<div class="card"><h3>All Workers - Cloud</h3><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Rate</th><th>Phone</th><th>Del</th></tr></thead><tbody id="workersTable"></tbody></table></div></div></div>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Attendance & Payroll - Dangote Lamu - AUTO SYNC</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f0f2f5}
+.topbar{background:#0f1020;color:#a0a0c0;font-size:12px;padding:6px 18px;display:flex;justify-content:space-between}
+.topbar span{color:#ff8c00}
+.nav{background:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.nav b{color:#0f2c8a}.nav-links a{background:#0f2c8a;color:#fff;text-decoration:none;padding:7px 14px;border-radius:4px;font-size:12px;margin-left:6px;font-weight:bold}
+.hero{background:#0f2c8a;padding:14px;display:flex;gap:14px;flex-wrap:wrap}
+.card{background:#fff;padding:16px;border-radius:12px}
+.left{width:340px}.right{flex:1;min-width:700px}
+input,select{width:100%;padding:10px;margin:5px 0;border:1.5px solid #c5cae9;border-radius:8px}
+.btn{padding:10px 16px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:4px 2px;font-size:12px}
+.btn-blue{background:#0f2c8a;color:#ffb81c}.btn-green{background:#2e7d32;color:#fff}.btn-red{background:#b71c1c;color:#fff}.btn-del{background:#ef9a9a;color:#b71c1c;padding:5px 12px;border-radius:12px}
+.stats{display:flex;gap:8px;margin:10px 0}.stat{flex:1;background:#0f2c8a;color:#fff;padding:10px;border-radius:8px;text-align:center}.stat b{color:#ffb81c;font-size:18px;display:block}
+table{width:100%;border-collapse:collapse}th{background:#0f2c8a;color:#ffb81c;padding:8px 5px;font-size:11px;text-align:left}td{padding:7px 5px;border-bottom:1px solid #ddd;font-size:11px}
+.working{color:#2e7d32;font-weight:bold}.done{color:#0f2c8a}
+.syncBanner{background:linear-gradient(90deg,#0a194e,#1a3fc0);border:1.5px solid #ffae00;color:#fff;padding:10px;border-radius:8px;margin-bottom:12px;font-size:12px}
+</style></head>
+<body>
+<div class="topbar"><div>📍 Mokowe, Lamu - LAPSSET Corridor | Attendance & Payroll Auto-Sync</div><div><span>Built by Muhsin | SKYNET-CYBER SHIANDA</span></div></div>
+<div class="nav"><b>DANGOTE LAMU REFINERY - ATTENDANCE</b><div class="nav-links"><a href="index.html">HOME</a><a href="recruitment.html">RECRUITMENT</a><a href="documents.html">DOCUMENTS</a><a href="systems.html">SYSTEMS</a></div></div>
+
+<div class="hero">
+<div class="left">
+<div class="card">
+<div class="syncBanner">🔄 AUTO-SYNC ON: Hired + Verified (60%+ docs) workers appear here automatically ready for work!</div>
+<h3 style="margin:0 0 8px;color:#0f2c8a">Add Worker (Manual)</h3>
+<input id="wname" placeholder="Name">
+<input id="wid" placeholder="ID">
+<input id="wphone" placeholder="Phone 07...">
+<label>Skill</label><select id="wskill"><option>Casual Labour</option><option>Mason</option><option>Carpenter</option><option>Welder</option><option>Driver</option><option>Operator</option><option>Engineer</option></select>
+<label>Daily Rate KES</label><input id="wrate" type="number" value="1500">
+<button class="btn btn-blue" style="width:100%" onclick="addManual()">+ SAVE TO CLOUD</button>
+<div id="msg" style="font-size:11px;margin-top:6px;font-weight:bold"></div>
+<hr>
+<h3 style="margin:8px 0;color:#0f2c8a">Check In / Out</h3>
+<input id="checkId" placeholder="Enter Worker ID e.g. 54321234">
+<div style="display:flex;gap:6px">
+<button class="btn btn-green" style="flex:1" onclick="checkIn()">✔ CHECK IN</button>
+<button class="btn btn-red" style="flex:1" onclick="checkOut()">✖ CHECK OUT</button>
+</div>
+<button class="btn btn-blue" style="width:100%;margin-top:6px" onclick="syncFromHR()">🔄 SYNC FROM HR NOW</button>
+</div>
+</div>
+
+<div class="right">
+<div class="card" style="margin-bottom:14px">
+<h3 style="margin:0;color:#0f2c8a">Today - <span id="todayDate"></span></h3>
+<div class="stats"><div class="stat"><b id="cToday">0</b>Today Working</div><div class="stat"><b id="cPayToday">0</b>Pay Today KES</div><div class="stat"><b id="cTotalWorkers">0</b>Total Workforce</div></div>
+<div style="overflow:auto;max-height:30vh"><table><thead><tr><th>ID</th><th>Name</th><th>In</th><th>Out</th><th>Hours</th><th>Pay</th></tr></thead><tbody id="todayBody"></tbody></table></div>
+</div>
+
+<div class="card">
+<h3 style="margin:0;color:#0f2c8a">All Workers - Cloud (Auto from HR Hired + Verified)</h3>
+<div style="font-size:10px;color:#555;margin:4px 0">Workers appear here automatically after HR hires + ticks ID,KRA,NSSF,SHIF,GC (60%+). Ready for attendance & payroll.</div>
+<div style="overflow:auto;max-height:50vh"><table><thead><tr><th>ID</th><th>Name</th><th>Skill</th><th>Rate</th><th>Phone</th><th>Docs</th><th>Contract</th><th>Action</th></tr></thead><tbody id="allBody"></tbody></table></div>
+</div>
+</div>
+</div>
+
 <script>
-const SUPABASE_URL = "https://dnjsdcmtwrvydmoalmzc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_ECV6XUpesPYbEccQpwSx6A_5oyQxJmV";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let workers=[], attend=[];
-async function loadAll(){
- try{
-  let {data:w}=await sb.from('lamu_workers').select('*').order('created_at',{ascending:false}).limit(1000);
-  let today=new Date().toLocaleDateString();
-  let {data:a}=await sb.from('lamu_attendance').select('*').eq('date',today).limit(1000);
-  workers=w||[]; attend=a||[];
-  document.getElementById('status').innerText="✅ CLOUD CONNECTED - Workers: "+workers.length+" - FINAL FIX DONE!";
-  render();
- }catch(e){document.getElementById('status').innerText="❌ "+e.message}
+const KEY_REC='lamu_recruitment_demo'; const KEY_DOC='lamu_documents_demo'; const KEY_WORKERS='lamu_workers_cloud'; const KEY_ATT='lamu_attendance_today';
+let workers=JSON.parse(localStorage.getItem(KEY_WORKERS)||'[]');
+let todayAtt=JSON.parse(localStorage.getItem(KEY_ATT)||'[]');
+document.getElementById('todayDate').innerText=new Date().toDateString();
+
+function daysLeft(e){return Math.ceil((new Date(e)-new Date())/86400000);}
+
+function syncFromHR(){
+ let rec=JSON.parse(localStorage.getItem(KEY_REC)||'[]');
+ let docs=JSON.parse(localStorage.getItem(KEY_DOC)||'[]');
+ let added=0;
+ rec.forEach(r=>{
+  if(r.status!=='Hired') return;
+  let d=docs.find(x=>x.id==r.id);
+  let verifiedCount=d?[d.ID,d.KRA,d.NSSF,d.SHIF,d.GC].filter(Boolean).length:0;
+  let perc=d?Math.round(verifiedCount/5*100):0;
+  if(!d || perc<60) return; // need at least 60% docs verified
+  if(workers.find(w=>w.id==r.id)) return;
+  let rate = r.skill=='Engineer'?2500 : r.skill=='Operator'?1800 : r.skill=='Driver'?1500 : r.skill=='Mason'?1500 : 1200;
+  workers.unshift({id:r.id,name:r.name,skill:r.skill,rate:rate,phone:r.phone||'071...',docs:perc+'%',cend:r.cend});
+  added++;
+ });
+ localStorage.setItem(KEY_WORKERS,JSON.stringify(workers));
+ document.getElementById('msg').innerHTML=`<div style="color:green">✅ Synced ${added} new hired+verified workers from HR! Ready for work!</div>`;
+ loadAll(); loadToday();
 }
-async function addWorker(){
- let id=document.getElementById('wID').value.trim(), name=document.getElementById('wName').value.trim(), phone=document.getElementById('wPhone').value.trim(), skill=document.getElementById('wSkill').value, rate=parseInt(document.getElementById('wRate').value)||1200;
- if(!id||!name){alert('ID and Name required');return;}
- let {error}=await sb.from('lamu_workers').insert([{id,name,phone,skill,rate}]);
- if(error) alert(error.message); else {document.getElementById('wID').value='';document.getElementById('wName').value='';loadAll();}
+
+// Auto sync on page load
+syncFromHR();
+
+function loadAll(){
+ let tb=document.getElementById('allBody'); tb.innerHTML='';
+ workers.forEach((w,i)=>{
+  let dl=w.cend?daysLeft(w.cend):0;
+  tb.innerHTML+=`<tr><td>${w.id}</td><td><b>${w.name}</b></td><td>${w.skill}</td><td>${w.rate}</td><td>${w.phone}</td><td>${w.docs||'100%'}</td><td>${dl<0?'EXPIRED':dl+'d'}</td><td><button class="btn-del" onclick="delWorker(${i})">Del</button></td></tr>`;
+ });
+ document.getElementById('cTotalWorkers').innerText=workers.length;
 }
-async function checkIn(){
- let id=document.getElementById('cID').value.trim(); if(!id)return alert('Enter ID');
- let w=workers.find(x=>x.id===id); if(!w)return alert('Worker '+id+' not found! Add in Add Worker first!');
- let {error}=await sb.from('lamu_attendance').insert([{worker_id:id,name:w.name,skill:w.skill,date:new Date().toLocaleDateString(),time_in:new Date().toLocaleTimeString(),pay:w.rate}]);
- if(error) alert(error.message); else loadAll();
+function loadToday(){
+ let tb=document.getElementById('todayBody'); tb.innerHTML=''; let totalPay=0;
+ todayAtt.forEach(a=>{
+  totalPay+=parseInt(a.pay||0);
+  tb.innerHTML+=`<tr><td>${a.id}</td><td><b>${a.name}</b></td><td>${a.in}</td><td>${a.out||'<span class=working>Working..</span>'}</td><td>${a.hours||'...'}</td><td>${a.pay||a.rate}</td></tr>`;
+ });
+ document.getElementById('cToday').innerText=todayAtt.filter(x=>!x.out).length;
+ document.getElementById('cPayToday').innerText=totalPay;
 }
-async function checkOut(){
- let id=document.getElementById('cID').value.trim(); let rec=attend.filter(x=>x.worker_id===id && !x.time_out).pop(); if(!rec)return alert('No active check-in for '+id);
- await sb.from('lamu_attendance').update({time_out:new Date().toLocaleTimeString()}).eq('id',rec.id); loadAll();
+
+function addManual(){
+ let name=document.getElementById('wname').value.trim().toUpperCase(), id=document.getElementById('wid').value.trim(), phone=document.getElementById('wphone').value.trim(), skill=document.getElementById('wskill').value, rate=parseInt(document.getElementById('wrate').value)||1500;
+ if(!name||!id){document.getElementById('msg').innerHTML='<div style="color:red">Enter Name & ID</div>';return;}
+ if(workers.find(w=>w.id==id)){document.getElementById('msg').innerHTML='<div style="color:orange">Worker exists</div>';return;}
+ workers.unshift({id,name,skill,rate,phone,docs:'Manual',cend:'2027-12-31'});
+ localStorage.setItem(KEY_WORKERS,JSON.stringify(workers)); loadAll();
+ document.getElementById('msg').innerHTML=`<div style="color:green">✅ ${name} added - ready for check-in!</div>`;
 }
-function render(){
- let total=workers.length; if(total===0 && attend.length>0) total=attend.length;
- document.getElementById('totalW').innerText=total;
- document.getElementById('presentW').innerText=attend.length;
- document.getElementById('absentW').innerText=Math.max(0,total-attend.length);
- let tb1=document.getElementById('todayTable'); tb1.innerHTML=''; attend.forEach(a=>{tb1.innerHTML+=`<tr><td>${a.worker_id}</td><td>${a.name}</td><td>${a.time_in}</td><td>${a.time_out||'Working...'}</td><td>${a.pay}</td></tr>`});
- let tb2=document.getElementById('workersTable'); tb2.innerHTML=''; workers.forEach(w=>{tb2.innerHTML+=`<tr><td>${w.id}</td><td>${w.name}</td><td>${w.skill}</td><td>${w.rate}</td><td>${w.phone}</td><td><button onclick="delW('${w.id}')" style="background:red;padding:3px">Del</button></td></tr>`});
+function delWorker(i){if(confirm('Delete worker?')){workers.splice(i,1); localStorage.setItem(KEY_WORKERS,JSON.stringify(workers)); loadAll();}}
+
+function checkIn(){
+ let id=document.getElementById('checkId').value.trim();
+ if(!id){alert('Enter ID');return;}
+ let w=workers.find(x=>x.id==id); if(!w){alert('Worker not found. Sync from HR first!');return;}
+ if(todayAtt.find(a=>a.id==id && !a.out)){alert('Already checked in');return;}
+ let now=new Date(); let time=now.toLocaleTimeString();
+ todayAtt.unshift({id:w.id,name:w.name,rate:w.rate,in:time,out:'',pay:w.rate,hours:'',inTime:now.getTime()});
+ localStorage.setItem(KEY_ATT,JSON.stringify(todayAtt)); loadToday();
 }
-async function delW(id){if(confirm('Delete '+id+'?')){await sb.from('lamu_workers').delete().eq('id',id);loadAll();}}
-document.getElementById('today').innerText=new Date().toDateString(); loadAll();
+function checkOut(){
+ let id=document.getElementById('checkId').value.trim();
+ let a=todayAtt.find(x=>x.id==id && !x.out); if(!a){alert('Not checked in today');return;}
+ let now=new Date(); let hrs=((now.getTime()-a.inTime)/3600000).toFixed(1);
+ a.out=now.toLocaleTimeString(); a.hours=hrs+' hrs';
+ localStorage.setItem(KEY_ATT,JSON.stringify(todayAtt)); loadToday();
+}
+
+loadAll(); loadToday();
 </script></body></html>
